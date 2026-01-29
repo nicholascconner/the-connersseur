@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
 
 export const metadata: Metadata = {
   title: 'The Connersseur - Cocktail Menu',
@@ -35,6 +36,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/connersseur_icon.png" />
       </head>
       <body className="font-sans antialiased min-h-screen" suppressHydrationWarning>
+        <ServiceWorkerRegistration />
         {children}
       </body>
     </html>
