@@ -31,6 +31,8 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="/connersseur_icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/connersseur_icon.png" />
       </head>
       <body className="font-sans antialiased min-h-screen" suppressHydrationWarning>
         {children}
