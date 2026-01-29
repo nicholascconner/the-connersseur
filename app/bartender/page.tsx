@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import MarqueeLogo from '@/components/MarqueeLogo';
+import FilterDropdown from '@/components/FilterDropdown';
 import { useRealtimeOrders } from '@/lib/hooks/useRealtimeOrders';
 import OrderCard from '@/components/OrderCard';
 import StatsCard from '@/components/StatsCard';
@@ -297,16 +298,16 @@ function BartenderDashboardContent() {
 
           {/* Filter Row */}
           <div className="flex justify-center items-center gap-4 mb-6">
-            <select
+            <FilterDropdown
               value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value as DateFilter)}
-              className="filter-select"
-            >
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="all">All Time</option>
-            </select>
+              onChange={(value) => setDateFilter(value as DateFilter)}
+              options={[
+                { value: 'today', label: 'Today' },
+                { value: 'week', label: 'This Week' },
+                { value: 'month', label: 'This Month' },
+                { value: 'all', label: 'All Time' },
+              ]}
+            />
           </div>
 
           {/* Search Section */}
