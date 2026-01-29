@@ -6,13 +6,11 @@
   "display": "standalone",
   "background_color": "#F5F5DC",
   "theme_color": "#8B1538",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "/connersseur_icon.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any"
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
