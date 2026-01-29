@@ -1,4 +1,4 @@
-export function validateBartenderKey(key: string | null): boolean {
+export function validateBartenderKey(key: string | null | undefined): boolean {
   const expectedKey = process.env.BARTENDER_DASH_KEY;
 
   if (!expectedKey) {

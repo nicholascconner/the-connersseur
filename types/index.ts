@@ -69,7 +69,8 @@ export interface CreateOrderRequest {
 
 export interface UpdateOrderStatusRequest {
   status: OrderStatus;
-  bartender_key: string;
+  bartender_key?: string;
+  session_auth?: boolean;
 }
 
 export interface GuestSearchResponse {
