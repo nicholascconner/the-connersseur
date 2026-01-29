@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Card Stack - The Connersseur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #F5F7FA 0%, #E8EBF0 100%);
+      min-height: 100vh;
+      color: #1A202C;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #8B1538 0%, #6A0F2A 100%);
+      padding: 32px 24px;
+      box-shadow: 0 8px 24px rgba(139, 21, 56, 0.2);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 44px;
+      font-weight: 800;
+      color: #FFD700;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-header {
+      padding: 14px 28px;
+      border-radius: 50px;
+      border: none;
+      background: #FFD700;
+      color: #8B1538;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 15px;
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+    }
+
+    .btn-header:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .filter-select {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 15px;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .search-section {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .search-wrapper {
+      display: flex;
+      gap: 14px;
+    }
+
+    .search-input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 18px 18px 18px 52px;
+      border-radius: 50px;
+      border: 3px solid rgba(255, 215, 0, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+      font-size: 16px;
+      color: #1A202C;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(139, 21, 56, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #FFD700;
+      box-shadow: 0 6px 24px rgba(255, 215, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+
+    .search-badge {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #8B1538;
+      color: #FFD700;
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      max-width: 1400px;
+      margin: 48px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 10px 40px rgba(139, 21, 56, 0.08);
+      transform: translateZ(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateZ(20px) scale(1.05);
+      box-shadow: 0 10px 60px rgba(139, 21, 56, 0.15);
+    }
+
+    .stat-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+
+    .stat-value {
+      font-size: 48px;
+      font-weight: 800;
+      color: #8B1538;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #718096;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Orders Section */
+    .orders-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 28px;
+    }
+
+    .column-header {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1A202C;
+      margin-bottom: 20px;
+      padding: 16px 24px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .badge-new {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #8B1538;
+    }
+
+    .badge-progress {
+      background: linear-gradient(135deg, #4299E1, #3182CE);
+      color: white;
+    }
+
+    .badge-completed {
+      background: linear-gradient(135deg, #48BB78, #38A169);
+      color: white;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.12),
+        0 10px 40px rgba(139, 21, 56, 0.08);
+      transform: translateZ(0);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .order-card:hover {
+      transform: translateZ(20px) scale(1.02);
+      box-shadow: 0 15px 60px rgba(139, 21, 56, 0.15);
+    }
+
+    .order-card.completed {
+      opacity: 0.7;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .order-number {
+      background: #8B1538;
+      color: #FFD700;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .order-time {
+      font-size: 13px;
+      color: #A0AEC0;
+      font-weight: 600;
+    }
+
+    .guest-name {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1A202C;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .group-name {
+      display: inline-block;
+      font-size: 12px;
+      color: #8B1538;
+      background: rgba(139, 21, 56, 0.1);
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .drinks-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .drink-item {
+      padding: 16px;
+      background: linear-gradient(135deg, #F7FAFC, #EDF2F7);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border-left: 4px solid #8B1538;
+    }
+
+    .drink-name {
+      font-weight: 700;
+      color: #1A202C;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .drink-notes {
+      font-size: 14px;
+      color: #718096;
+      font-style: italic;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 18px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #4299E1, #3182CE);
+      color: white;
+      box-shadow: 0 4px 16px rgba(66, 153, 225, 0.3);
+    }
+
+    .btn-start:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(66, 153, 225, 0.4);
+    }
+
+    .btn-complete {
+      background: linear-gradient(135deg, #48BB78, #38A169);
+      color: white;
+      box-shadow: 0 4px 16px rgba(72, 187, 120, 0.3);
+    }
+
+    .btn-complete:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(72, 187, 120, 0.4);
+    }
+
+    .mockup-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FFC700);
+      color: #8B1538;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
+      border: 3px solid #8B1538;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <div class="header-top">
+        <div>
+          <h1>The Connersseur</h1>
+          <div class="header-subtitle">Bartender Dashboard</div>
+        </div>
+        <div class="header-controls">
+          <button class="btn-header">📊 Export</button>
+          <button class="btn-header">🌙</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select class="filter-select">
+          <option>This Week</option>
+          <option>Today</option>
+          <option>This Month</option>
+          <option>All Time</option>
+        </select>
+      </div>
+
+      <div class="search-section">
+        <div class="search-wrapper">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search by guest, order #, or drink...">
+            <span class="search-badge">Live</span>
+          </div>
+          <button class="btn-header">☑️ Bulk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🍸</div>
+      <div class="stat-value">42</div>
+      <div class="stat-label">Total Drinks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-value">15</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🆕</div>
+      <div class="stat-value">3</div>
+      <div class="stat-label">New</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value">5</div>
+      <div class="stat-label">In Progress</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value">6</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">❌</div>
+      <div class="stat-value">1</div>
+      <div class="stat-label">Cancelled</div>
+    </div>
+  </div>
+
+  <!-- Orders Columns -->
+  <div class="orders-container">
+    <div class="columns">
+      <!-- New Orders -->
+      <div class="column">
+        <div class="column-header">
+          🆕 New Orders
+          <span class="status-badge badge-new">3</span>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-number">#127</div>
+            <div class="order-time">2:45 PM</div>
+          </div>
+          <div class="guest-name">Sarah Martinez</div>
+          <span class="group-name">🎉 Birthday Party</span>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">2× Classic Martini</div>
+              <div class="drink-notes">Extra dry, with olives</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">1× Espresso Martini</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-start">Start</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-number">#128</div>
+            <div class="order-time">2:48 PM</div>
+          </div>
+          <div class="guest-name">James Wilson</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">1× Old Fashioned</div>
+              <div class="drink-notes">Light ice please</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-start">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress -->
+      <div class="column">
+        <div class="column-header">
+          ⏳ In Progress
+          <span class="status-badge badge-progress">5</span>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-number">#124</div>
+            <div class="order-time">2:30 PM</div>
+          </div>
+          <div class="guest-name">Michael Chen</div>
+          <span class="group-name">💼 Corporate Event</span>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">3× Manhattan</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">2× Whiskey Sour</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-complete">Complete</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-number">#125</div>
+            <div class="order-time">2:35 PM</div>
+          </div>
+          <div class="guest-name">Emma Thompson</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">1× Cosmopolitan</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">1× Moscow Mule</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-complete">Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completed -->
+      <div class="column">
+        <div class="column-header">
+          ✅ Completed
+          <span class="status-badge badge-completed">6</span>
+        </div>
+
+        <div class="order-card completed">
+          <div class="order-header">
+            <div class="order-number">#123</div>
+            <div class="order-time">2:25 PM</div>
+          </div>
+          <div class="guest-name">David Park</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">2× Margarita</div>
+              <div class="drink-notes">Salt rim</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="order-card completed">
+          <div class="order-header">
+            <div class="order-number">#122</div>
+            <div class="order-time">2:20 PM</div>
+          </div>
+          <div class="guest-name">Lisa Anderson</div>
+          <span class="group-name">👯 Girls Night</span>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">4× Mojito</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup-badge">
+    Design #4: Modern Card Stack
+  </div>
+</body>
+</html>

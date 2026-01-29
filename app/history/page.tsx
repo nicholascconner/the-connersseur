@@ -14,7 +14,6 @@ export default function HistoryPage() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        // Fetch recent orders (last 50, completed only)
         const { data: ordersData, error: ordersError } = await supabase
           .from('orders')
           .select('*')
@@ -24,7 +23,6 @@ export default function HistoryPage() {
 
         if (ordersError) throw ordersError;
 
-        // Fetch all order items for those orders
         const orderIds = (ordersData || []).map((o) => o.id);
         const { data: itemsData, error: itemsError } = await supabase
           .from('order_items')
@@ -33,7 +31,6 @@ export default function HistoryPage() {
 
         if (itemsError) throw itemsError;
 
-        // Combine orders with items
         const ordersWithItems: OrderWithItems[] = (ordersData || []).map((order) => ({
           ...order,
           order_items: (itemsData || []).filter((item) => item.order_id === order.id),
@@ -41,12 +38,10 @@ export default function HistoryPage() {
 
         setRecentOrders(ordersWithItems);
 
-        // Calculate popular drinks
         const drinkCounts: Record<string, { count: number; isCustom: boolean }> = {};
 
         (itemsData || []).forEach((item) => {
           if (item.is_custom) {
-            // Group all custom drinks together
             const key = 'Custom Request';
             drinkCounts[key] = drinkCounts[key] || { count: 0, isCustom: true };
             drinkCounts[key].count += item.quantity;
@@ -79,56 +74,58 @@ export default function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream-light flex items-center justify-center">
-        <div className="text-burgundy text-xl">Loading history...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-burgundy text-xl font-bold">Loading history...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-cream-light pb-12">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Link href="/" className="text-burgundy hover:text-burgundy-dark">
+    <div className="min-h-screen pb-12">
+      {/* Header */}
+      <header className="header-gradient py-8 px-6 mb-8">
+        <div className="max-w-4xl mx-auto">
+          <Link href="/" className="text-white/80 hover:text-white font-semibold transition-colors">
             ← Back to Menu
           </Link>
+          <h1 className="text-4xl font-extrabold text-gold mt-4" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+            Community Order History
+          </h1>
         </div>
+      </header>
 
-        <h1 className="text-3xl font-bold text-burgundy mb-8 text-center">
-          Community Order History
-        </h1>
-
+      <div className="max-w-4xl mx-auto px-6">
         {/* Most Popular Drinks */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-burgundy mb-4">
-            🏆 Most Popular Drinks
-          </h2>
+        <div className="card-static p-8 mb-8">
+          <div className="column-header mb-6">
+            Most Popular Drinks
+          </div>
           {popularDrinks.length === 0 ? (
-            <p className="text-gray-600">No orders yet!</p>
+            <p className="text-gray-500 font-semibold">No orders yet!</p>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {popularDrinks.map((drink, index) => (
                 <div
                   key={drink.item_name}
-                  className="flex items-center justify-between bg-cream-light rounded-lg p-4"
+                  className="drink-item flex items-center justify-between"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="text-2xl font-bold text-burgundy w-8">
+                    <div className="text-3xl font-extrabold text-burgundy w-10">
                       #{index + 1}
                     </div>
                     <div>
-                      <div className="font-medium text-burgundy-dark">
+                      <div className="font-bold text-gray-800">
                         {drink.item_name}
                         {drink.is_custom && (
-                          <span className="ml-2 text-xs bg-gold text-burgundy-dark px-2 py-1 rounded">
-                            Custom
+                          <span className="ml-2 text-xs bg-gold text-burgundy-dark px-2 py-1 rounded-full font-bold">
+                            CUSTOM
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="text-lg font-semibold text-gray-700">
-                    {drink.order_count} {drink.order_count === 1 ? 'order' : 'orders'}
+                  <div className="text-lg font-extrabold text-burgundy">
+                    {drink.order_count}
                   </div>
                 </div>
               ))}
@@ -137,42 +134,44 @@ export default function HistoryPage() {
         </div>
 
         {/* Recent Orders */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold text-burgundy mb-4">
-            📋 Recent Orders
-          </h2>
+        <div className="card-static p-8">
+          <div className="column-header mb-6">
+            Recent Orders
+          </div>
           {recentOrders.length === 0 ? (
-            <p className="text-gray-600">No completed orders yet!</p>
+            <p className="text-gray-500 font-semibold">No completed orders yet!</p>
           ) : (
             <div className="space-y-4">
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="border border-gray-200 rounded-lg p-4 hover:bg-cream-light transition-colors"
+                  className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300"
                 >
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-start mb-4">
                     <div>
-                      <div className="font-semibold text-burgundy">
+                      <div className="font-extrabold text-gray-800 text-lg">
                         {getPrivacyName(order.guest_name)}
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-gray-400 font-semibold">
                         {formatDateTime(order.created_at)}
                       </div>
                     </div>
                     {order.group_name && (
-                      <div className="text-sm text-gray-600 italic">
+                      <span className="group-badge">
                         {order.group_name}
-                      </div>
+                      </span>
                     )}
                   </div>
 
-                  <div className="mt-2 space-y-1">
+                  <div className="space-y-2">
                     {order.order_items.map((item) => (
-                      <div key={item.id} className="text-sm text-gray-700">
-                        <span className="font-medium text-burgundy-dark">
+                      <div key={item.id} className="drink-item">
+                        <span className="font-bold text-gray-800">
                           {item.quantity}x
                         </span>{' '}
-                        {item.is_custom ? 'Custom Request' : item.item_name}
+                        <span className="text-gray-600">
+                          {item.is_custom ? 'Custom Request' : item.item_name}
+                        </span>
                       </div>
                     ))}
                   </div>

@@ -1,96 +1,221 @@
 'use client';
 
 import { OrderWithItems, OrderStatus } from '@/types';
-import { formatTime } from '@/lib/utils/formatters';
+import { formatTime, getRelativeTime, isOrderOld } from '@/lib/utils/formatters';
 
 interface OrderCardProps {
   order: OrderWithItems;
   onStatusChange: (orderId: string, newStatus: OrderStatus) => void;
+  selected?: boolean;
+  onToggleSelect?: (orderId: string) => void;
 }
 
-export default function OrderCard({ order, onStatusChange }: OrderCardProps) {
-  const getStatusColor = (status: OrderStatus) => {
-    switch (status) {
-      case 'new':
-        return 'bg-yellow-100 border-yellow-400';
-      case 'in_progress':
-        return 'bg-blue-100 border-blue-400';
-      case 'completed':
-        return 'bg-green-100 border-green-400';
-      case 'cancelled':
-        return 'bg-red-100 border-red-400';
-      default:
-        return 'bg-gray-100 border-gray-400';
-    }
-  };
+function printOrderTicket(order: OrderWithItems) {
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) return;
+
+  const printContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Order #${order.order_number}</title>
+      <style>
+        @media print {
+          body { margin: 0; }
+          .no-print { display: none; }
+        }
+        body {
+          font-family: 'Courier New', monospace;
+          max-width: 300px;
+          margin: 20px auto;
+          padding: 20px;
+        }
+        h1 {
+          text-align: center;
+          border-bottom: 3px solid #000;
+          padding-bottom: 10px;
+          margin-bottom: 20px;
+        }
+        .order-info {
+          margin-bottom: 20px;
+          font-size: 14px;
+        }
+        .item {
+          margin: 15px 0;
+          padding: 10px 0;
+          border-bottom: 1px dashed #999;
+        }
+        .item-qty {
+          font-weight: bold;
+          font-size: 18px;
+        }
+        .item-name {
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .notes {
+          font-style: italic;
+          margin-top: 5px;
+          color: #666;
+        }
+        .footer {
+          margin-top: 30px;
+          text-align: center;
+          border-top: 3px solid #000;
+          padding-top: 10px;
+        }
+        button {
+          margin: 20px auto;
+          display: block;
+          padding: 10px 20px;
+          font-size: 16px;
+          cursor: pointer;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>The Connersseur</h1>
+      <div class="order-info">
+        <div><strong>Order #${order.order_number}</strong></div>
+        <div>Guest: ${order.guest_name}</div>
+        ${order.group_name ? `<div>Group: ${order.group_name}</div>` : ''}
+        <div>Time: ${new Date(order.created_at).toLocaleTimeString()}</div>
+      </div>
+      <div class="items">
+        ${order.order_items.map(item => `
+          <div class="item">
+            <div>
+              <span class="item-qty">${item.quantity}x</span>
+              <span class="item-name">${item.item_name}</span>
+              ${item.is_custom ? ' <span style="background: #FFD700; padding: 2px 6px; font-size: 10px;">CUSTOM</span>' : ''}
+            </div>
+            ${item.notes ? `<div class="notes">"${item.notes}"</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      <div class="footer">
+        Thank you!
+      </div>
+      <button class="no-print" onclick="window.print(); window.close();">Print</button>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+}
+
+export default function OrderCard({ order, onStatusChange, selected = false, onToggleSelect }: OrderCardProps) {
+  const isOld = isOrderOld(order.created_at);
+  const isCompleted = order.status === 'completed';
 
   return (
-    <div className={`${getStatusColor(order.status)} border-2 rounded-lg p-4 mb-4 shadow-md`}>
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <div className="text-sm text-gray-600">{formatTime(order.created_at)}</div>
-          <h3 className="text-xl font-bold text-burgundy">{order.guest_name}</h3>
-          {order.group_name && (
-            <div className="text-sm text-gray-600 italic">Group: {order.group_name}</div>
+    <div
+      className={`
+        bg-white rounded-2xl p-7 mb-5 shadow-card cursor-pointer
+        transition-all duration-300
+        ${isOld && !isCompleted ? 'ring-2 ring-red-400 animate-pulse' : ''}
+        ${selected ? 'ring-4 ring-blue-500' : ''}
+        ${isCompleted ? 'opacity-70' : 'hover:shadow-card-hover hover:scale-[1.02]'}
+      `}
+      style={{ transform: 'translateZ(0)' }}
+    >
+      {/* Header Row */}
+      <div className="flex justify-between items-center mb-5">
+        <div className="flex items-center gap-3">
+          {onToggleSelect && (
+            <input
+              type="checkbox"
+              checked={selected}
+              onChange={() => onToggleSelect(order.id)}
+              className="w-5 h-5 cursor-pointer accent-burgundy"
+            />
           )}
+          <span className="order-number-badge">#{order.order_number}</span>
         </div>
-        <div className="text-right">
-          <div className="text-xs text-gray-500">Order #{order.id.slice(0, 8)}</div>
-        </div>
+        <span className="text-sm text-gray-400 font-semibold">
+          {formatTime(order.created_at)}
+          {isOld && !isCompleted && (
+            <span className="ml-2 text-red-500 font-bold">
+              ({getRelativeTime(order.created_at)})
+            </span>
+          )}
+        </span>
       </div>
 
-      <div className="space-y-2 mb-4">
+      {/* Guest Name */}
+      <h3 className="text-2xl font-extrabold text-gray-800 mb-2 leading-tight">
+        {order.guest_name}
+      </h3>
+
+      {/* Group Name Badge */}
+      {order.group_name && (
+        <span className="group-badge">
+          {order.group_name}
+        </span>
+      )}
+
+      {/* Drinks List */}
+      <div className="mb-6">
         {order.order_items.map((item) => (
-          <div key={item.id} className="bg-white bg-opacity-60 rounded p-2">
+          <div key={item.id} className="drink-item">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-burgundy-dark">
-                {item.quantity}x
+              <span className="font-bold text-gray-800 text-base">
+                {item.quantity}x {item.item_name}
               </span>
-              <span className="font-medium">
-                {item.item_name}
-                {item.is_custom && (
-                  <span className="ml-2 text-xs bg-gold text-burgundy-dark px-2 py-0.5 rounded">
-                    Custom
-                  </span>
-                )}
-              </span>
+              {item.is_custom && (
+                <span className="text-xs bg-gold text-burgundy-dark px-2 py-0.5 rounded-full font-bold">
+                  CUSTOM
+                </span>
+              )}
             </div>
             {item.notes && (
-              <div className="text-sm text-gray-700 mt-1 ml-8 italic">
+              <p className="text-sm text-gray-500 mt-1 italic">
                 &quot;{item.notes}&quot;
-              </div>
+              </p>
             )}
           </div>
         ))}
       </div>
 
-      <div className="flex gap-2">
-        {order.status === 'new' && (
-          <button
-            onClick={() => onStatusChange(order.id, 'in_progress')}
-            className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors font-medium text-lg"
-          >
-            Start
-          </button>
-        )}
+      {/* Action Buttons */}
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3">
+          {order.status === 'new' && (
+            <button
+              onClick={() => onStatusChange(order.id, 'in_progress')}
+              className="btn-start"
+            >
+              Start
+            </button>
+          )}
 
-        {order.status === 'in_progress' && (
-          <button
-            onClick={() => onStatusChange(order.id, 'completed')}
-            className="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors font-medium text-lg"
-          >
-            Complete
-          </button>
-        )}
+          {order.status === 'in_progress' && (
+            <button
+              onClick={() => onStatusChange(order.id, 'completed')}
+              className="btn-complete"
+            >
+              Complete
+            </button>
+          )}
 
-        {(order.status === 'new' || order.status === 'in_progress') && (
-          <button
-            onClick={() => onStatusChange(order.id, 'cancelled')}
-            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
-          >
-            Cancel
-          </button>
-        )}
+          {(order.status === 'new' || order.status === 'in_progress') && (
+            <button
+              onClick={() => onStatusChange(order.id, 'cancelled')}
+              className="btn-cancel"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+
+        {/* Print Button */}
+        <button
+          onClick={() => printOrderTicket(order)}
+          className="w-full py-3 rounded-xl bg-gray-100 text-gray-600 font-bold text-sm hover:bg-gray-200 transition-colors"
+        >
+          Print Ticket
+        </button>
       </div>
     </div>
   );

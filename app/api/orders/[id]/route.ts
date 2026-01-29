@@ -53,8 +53,11 @@ export async function PATCH(
     const { id } = await params;
     const body: UpdateOrderStatusRequest = await request.json();
 
-    // Validate bartender key
-    if (!validateBartenderKey(body.bartender_key)) {
+    // Validate bartender key OR session auth
+    const isKeyAuth = validateBartenderKey(body.bartender_key);
+    const isSessionAuth = body.session_auth === true;
+
+    if (!isKeyAuth && !isSessionAuth) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

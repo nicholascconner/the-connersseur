@@ -1,0 +1,40 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#8B1538" rx="64"/>
+
+  <!-- Wine Glass -->
+  <g transform="translate(256, 256)">
+    <!-- Glass bowl (upper part) -->
+    <path d="M -60 -120 Q -70 -80 -60 -40 L -40 60 L 40 60 L 60 -40 Q 70 -80 60 -120 Z"
+          fill="#D4AF37"
+          stroke="#F5F5DC"
+          stroke-width="4"/>
+
+    <!-- Wine inside glass -->
+    <path d="M -55 -100 Q -60 -70 -55 -45 L -38 50 L 38 50 L 55 -45 Q 60 -70 55 -100 Z"
+          fill="#8B1538"
+          opacity="0.3"/>
+
+    <!-- Stem -->
+    <rect x="-8" y="60" width="16" height="80"
+          fill="#D4AF37"
+          stroke="#F5F5DC"
+          stroke-width="3"/>
+
+    <!-- Base -->
+    <ellipse cx="0" cy="150" rx="50" ry="12"
+             fill="#D4AF37"
+             stroke="#F5F5DC"
+             stroke-width="3"/>
+  </g>
+
+  <!-- App Name (optional, for larger icon) -->
+  <text x="256" y="480"
+        font-family="serif"
+        font-size="32"
+        font-weight="bold"
+        fill="#F5F5DC"
+        text-anchor="middle">
+    The Connersseur
+  </text>
+</svg>

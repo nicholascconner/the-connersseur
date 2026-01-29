@@ -32,7 +32,6 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
 
     fetchOrder();
 
-    // Subscribe to real-time updates for this order
     const channel = supabase
       .channel(`order_${id}`)
       .on(
@@ -54,38 +53,35 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
     };
   }, [id]);
 
-  const getStatusDisplay = (status: OrderStatus) => {
+  const getStatusBadge = (status: OrderStatus) => {
     switch (status) {
       case 'new':
-        return { text: 'New Order', color: 'bg-yellow-100 text-yellow-800 border-yellow-300' };
+        return { text: 'New Order', class: 'badge-new' };
       case 'in_progress':
-        return { text: 'In Progress', color: 'bg-blue-100 text-blue-800 border-blue-300' };
+        return { text: 'In Progress', class: 'badge-progress' };
       case 'completed':
-        return { text: 'Completed', color: 'bg-green-100 text-green-800 border-green-300' };
+        return { text: 'Completed', class: 'badge-completed' };
       case 'cancelled':
-        return { text: 'Cancelled', color: 'bg-red-100 text-red-800 border-red-300' };
+        return { text: 'Cancelled', class: 'badge-cancelled' };
       default:
-        return { text: status, color: 'bg-gray-100 text-gray-800 border-gray-300' };
+        return { text: status, class: 'bg-gray-200 text-gray-800' };
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream-light flex items-center justify-center">
-        <div className="text-burgundy text-xl">Loading order...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-burgundy text-xl font-bold">Loading order...</div>
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="min-h-screen bg-cream-light flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="text-red-600 text-xl mb-4">{error || 'Order not found'}</div>
-          <Link
-            href="/"
-            className="inline-block bg-burgundy text-white py-2 px-6 rounded-lg hover:bg-burgundy-dark transition-colors"
-          >
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="card-static p-12 text-center">
+          <div className="text-red-600 text-xl mb-6 font-bold">{error || 'Order not found'}</div>
+          <Link href="/" className="btn-pill-burgundy">
             Back to Menu
           </Link>
         </div>
@@ -93,66 +89,69 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
     );
   }
 
-  const statusDisplay = getStatusDisplay(order.status);
+  const statusBadge = getStatusBadge(order.status);
 
   return (
-    <div className="min-h-screen bg-cream-light pb-12">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Link href="/" className="text-burgundy hover:text-burgundy-dark">
+    <div className="min-h-screen pb-12">
+      {/* Header */}
+      <header className="header-gradient py-8 px-6 mb-8">
+        <div className="max-w-2xl mx-auto">
+          <Link href="/" className="text-white/80 hover:text-white font-semibold transition-colors">
             ← Back to Menu
           </Link>
+          <h1 className="text-4xl font-extrabold text-gold mt-4" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+            Order Confirmation
+          </h1>
+          <p className="text-white/80 mt-2 font-semibold">Thank you, {order.guest_name}!</p>
         </div>
+      </header>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-          <h1 className="text-3xl font-bold text-burgundy mb-2">Order Confirmation</h1>
-          <p className="text-gray-600 mb-6">Thank you, {order.guest_name}!</p>
-
+      <div className="max-w-2xl mx-auto px-6">
+        <div className="card-static p-8">
           {/* Status Badge */}
-          <div className="mb-6">
-            <div className={`inline-block px-6 py-3 rounded-lg border-2 ${statusDisplay.color} font-bold text-lg`}>
-              {statusDisplay.text}
-            </div>
+          <div className="mb-8 text-center">
+            <span className={`status-badge ${statusBadge.class} text-lg px-8 py-3`}>
+              {statusBadge.text}
+            </span>
           </div>
 
           {/* Order Details */}
-          <div className="mb-6">
-            <div className="text-sm text-gray-600">
-              Order ID: {order.id.slice(0, 8)}
-            </div>
-            <div className="text-sm text-gray-600">
+          <div className="mb-8 text-center">
+            <span className="order-number-badge text-lg px-6 py-3">
+              #{order.order_number}
+            </span>
+            <div className="text-sm text-gray-400 font-semibold mt-4">
               Placed: {formatDateTime(order.created_at)}
             </div>
             {order.group_name && (
-              <div className="text-sm text-gray-600">
-                Group: {order.group_name}
-              </div>
+              <span className="group-badge mt-4 inline-block">
+                {order.group_name}
+              </span>
             )}
           </div>
 
           {/* Order Items */}
           <div>
-            <h2 className="text-xl font-semibold text-burgundy mb-4">Your Order</h2>
+            <div className="column-header mb-6">
+              Your Order
+            </div>
             <div className="space-y-3">
               {order.order_items.map((item) => (
-                <div key={item.id} className="bg-cream-light rounded-lg p-4">
+                <div key={item.id} className="drink-item">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-burgundy-dark">
-                      {item.quantity}x
+                    <span className="font-bold text-gray-800">
+                      {item.quantity}x {item.item_name}
                     </span>
-                    <span className="font-medium">
-                      {item.item_name}
-                      {item.is_custom && (
-                        <span className="ml-2 text-xs bg-gold text-burgundy-dark px-2 py-0.5 rounded">
-                          Custom
-                        </span>
-                      )}
-                    </span>
+                    {item.is_custom && (
+                      <span className="text-xs bg-gold text-burgundy-dark px-2 py-0.5 rounded-full font-bold">
+                        CUSTOM
+                      </span>
+                    )}
                   </div>
                   {item.notes && (
-                    <div className="text-sm text-gray-700 mt-2 ml-8 italic">
+                    <p className="text-sm text-gray-500 mt-1 italic">
                       &quot;{item.notes}&quot;
-                    </div>
+                    </p>
                   )}
                 </div>
               ))}
@@ -160,12 +159,12 @@ export default function OrderStatusPage({ params }: { params: Promise<{ id: stri
           </div>
 
           {/* Status Message */}
-          <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-800">
-              {order.status === 'new' && '🎉 Your order has been received! The bartender will start preparing it soon.'}
-              {order.status === 'in_progress' && '🍹 Your drinks are being prepared!'}
-              {order.status === 'completed' && '✅ Your order is ready! Enjoy!'}
-              {order.status === 'cancelled' && '❌ This order was cancelled.'}
+          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500">
+            <p className="text-blue-800 font-semibold">
+              {order.status === 'new' && 'Your order has been received! The bartender will start preparing it soon.'}
+              {order.status === 'in_progress' && 'Your drinks are being prepared!'}
+              {order.status === 'completed' && 'Your order is ready! Enjoy!'}
+              {order.status === 'cancelled' && 'This order was cancelled.'}
             </p>
           </div>
         </div>

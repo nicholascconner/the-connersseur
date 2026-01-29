@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Connersseur - Design Mockups</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B1538 0%, #6A0F2A 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #FFD700;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .header p {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 8px;
+    }
+
+    .header .subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .design-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .design-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: #ffffff;
+      display: block;
+    }
+
+    .design-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
+      border-color: #FFD700;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .design-card .number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: #FFD700;
+      color: #8B1538;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 40px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .design-card h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #FFD700;
+    }
+
+    .design-card .description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+
+    .design-card .features {
+      list-style: none;
+      padding: 0;
+    }
+
+    .design-card .features li {
+      font-size: 14px;
+      padding: 6px 0;
+      color: rgba(255, 255, 255, 0.7);
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .design-card .features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #FFD700;
+      font-weight: 700;
+    }
+
+    .design-card .cta {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: rgba(255, 215, 0, 0.2);
+      border: 2px solid #FFD700;
+      border-radius: 8px;
+      color: #FFD700;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .design-card:hover .cta {
+      background: #FFD700;
+      color: #8B1538;
+    }
+
+    .instructions {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 40px;
+    }
+
+    .instructions h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #FFD700;
+    }
+
+    .instructions p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 8px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+      margin-top: 12px;
+    }
+
+    .instructions li {
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>The Connersseur</h1>
+      <p>Design Mockups - Bartender Dashboard</p>
+      <p class="subtitle">Compare 4 modern design iterations side-by-side</p>
+    </div>
+
+    <div class="design-grid">
+      <!-- Design 1: Glassmorphism -->
+      <a href="glassmorphism.html" class="design-card">
+        <div class="number">1</div>
+        <h2>Glassmorphism Modern</h2>
+        <p class="description">
+          Frosted glass effect with soft shadows and floating aesthetic. Modern, airy, and elegant design perfect for bright environments.
+        </p>
+        <ul class="features">
+          <li>Frosted glass cards with backdrop blur</li>
+          <li>Soft shadows and smooth animations</li>
+          <li>Floating card aesthetic</li>
+          <li>Gold gradient buttons</li>
+        </ul>
+        <div class="cta">View Mockup →</div>
+      </a>
+
+      <!-- Design 2: Minimalist Premium -->
+      <a href="minimalist.html" class="design-card">
+        <div class="number">2</div>
+        <h2>Minimalist Premium</h2>
+        <p class="description">
+          Clean lines with generous whitespace and typography-focused design. Refined editorial aesthetic with subtle burgundy accents.
+        </p>
+        <ul class="features">
+          <li>Generous whitespace & breathing room</li>
+          <li>Bold typography hierarchy</li>
+          <li>Left-border status indicators</li>
+          <li>Minimal use of borders</li>
+        </ul>
+        <div class="cta">View Mockup →</div>
+      </a>
+
+      <!-- Design 3: Dark Mode Premium Bar -->
+      <a href="dark-premium.html" class="design-card">
+        <div class="number">3</div>
+        <h2>Dark Mode Premium Bar</h2>
+        <p class="description">
+          Dark theme optimized for dim bar environments with neon-inspired accents. High contrast for quick readability in low light.
+        </p>
+        <ul class="features">
+          <li>Nearly black background (#0F0F0F)</li>
+          <li>Neon glow effects on status cards</li>
+          <li>High contrast white text</li>
+          <li>Sophisticated nightlife vibe</li>
+        </ul>
+        <div class="cta">View Mockup →</div>
+      </a>
+
+      <!-- Design 4: Modern Card Stack -->
+      <a href="card-stack.html" class="design-card">
+        <div class="number">4</div>
+        <h2>Modern Card Stack</h2>
+        <p class="description">
+          Stacked cards with depth perception, bold actions, and playful interactions. Tactile feel perfect for touch interfaces.
+        </p>
+        <ul class="features">
+          <li>Elevated cards with multiple shadows</li>
+          <li>Bold pill-shaped status badges</li>
+          <li>Chunky, high-contrast buttons</li>
+          <li>Smooth spring physics on hover</li>
+        </ul>
+        <div class="cta">View Mockup →</div>
+      </a>
+    </div>
+
+    <div class="instructions">
+      <h3>How to Use These Mockups</h3>
+      <p>These are static visual mockups for design comparison. Buttons and interactions are non-functional.</p>
+      <ol>
+        <li>Click on any design card above to view the full mockup</li>
+        <li>Open multiple mockups in different browser tabs for side-by-side comparison</li>
+        <li>Consider which design best fits "The Connersseur" brand and bar environment</li>
+        <li>Note which elements you prefer from each design</li>
+        <li>Choose one design to implement, or mix elements from multiple designs</li>
+      </ol>
+    </div>
+  </div>
+</body>
+</html>

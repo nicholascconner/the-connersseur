@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CartItem } from '@/types';
 
 interface CartContextType {
@@ -68,20 +68,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
-    <CartContext.Provider
-      value={{
-        items,
-        itemCount,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        updateNotes,
-        clearCart,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+  const contextValue: CartContextType = {
+    items,
+    itemCount,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    updateNotes,
+    clearCart,
+  };
+
+  return React.createElement(
+    CartContext.Provider,
+    { value: contextValue },
+    children
   );
 }
 

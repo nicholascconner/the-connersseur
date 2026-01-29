@@ -14,6 +14,7 @@ export type OrderStatus = 'new' | 'in_progress' | 'completed' | 'cancelled';
 
 export interface Order {
   id: string;
+  order_number: number;
   guest_name: string;
   group_name: string | null;
   status: OrderStatus;

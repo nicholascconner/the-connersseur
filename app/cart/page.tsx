@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart, CartProvider } from '@/lib/hooks/useCart';
 import CartItem from '@/components/CartItem';
 import NameAutocomplete from '@/components/NameAutocomplete';
+import OrderConfirmationModal from '@/components/OrderConfirmationModal';
 import { CreateOrderRequest } from '@/types';
 
 function CartContent() {
@@ -15,6 +16,8 @@ function CartContent() {
   const [groupName, setGroupName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmedOrderNumber, setConfirmedOrderNumber] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,14 +60,12 @@ function CartContent() {
 
       const data = await response.json();
 
-      // Save name to localStorage for next time
       localStorage.setItem('connersseur_last_name', guestName.trim());
-
-      // Clear cart
       clearCart();
 
-      // Redirect to order status page
-      router.push(`/order/${data.order.id}`);
+      setConfirmedOrderNumber(data.order.order_number || 0);
+      setShowConfirmation(true);
+      setSubmitting(false);
     } catch (err) {
       console.error('Error submitting order:', err);
       setError('Failed to submit order. Please try again.');
@@ -73,23 +74,24 @@ function CartContent() {
   };
 
   return (
-    <div className="min-h-screen bg-cream-light pb-12">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Link href="/" className="text-burgundy hover:text-burgundy-dark">
+    <div className="min-h-screen pb-12">
+      {/* Header */}
+      <header className="header-gradient py-8 px-6 mb-8">
+        <div className="max-w-2xl mx-auto">
+          <Link href="/" className="text-white/80 hover:text-white font-semibold transition-colors">
             ← Back to Menu
           </Link>
+          <h1 className="text-4xl font-extrabold text-gold mt-4" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+            Your Cart
+          </h1>
         </div>
+      </header>
 
-        <h1 className="text-3xl font-bold text-burgundy mb-6 text-center">Your Cart</h1>
-
+      <div className="max-w-2xl mx-auto px-6">
         {items.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-600 mb-4">Your cart is empty</p>
-            <Link
-              href="/"
-              className="inline-block bg-burgundy text-white py-2 px-6 rounded-lg hover:bg-burgundy-dark transition-colors"
-            >
+          <div className="card-static p-12 text-center">
+            <p className="text-gray-500 mb-6 font-semibold">Your cart is empty</p>
+            <Link href="/" className="btn-pill-burgundy">
               Browse Menu
             </Link>
           </div>
@@ -97,9 +99,10 @@ function CartContent() {
           <form onSubmit={handleSubmit}>
             {/* Cart Items */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-burgundy mb-4">
-                Items ({itemCount})
-              </h2>
+              <div className="column-header mb-6">
+                Items
+                <span className="status-badge badge-new">{itemCount}</span>
+              </div>
               {items.map((item, index) => (
                 <CartItem
                   key={index}
@@ -113,10 +116,10 @@ function CartContent() {
             </div>
 
             {/* Guest Information */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-xl font-semibold text-burgundy mb-4">Your Information</h2>
+            <div className="card-static p-8 mb-8">
+              <h2 className="text-xl font-extrabold text-gray-800 mb-6">Your Information</h2>
 
-              <div className="mb-4">
+              <div className="mb-6">
                 <NameAutocomplete
                   value={guestName}
                   onChange={setGuestName}
@@ -125,7 +128,7 @@ function CartContent() {
               </div>
 
               <div>
-                <label htmlFor="group-name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="group-name" className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
                   Group Name (Optional)
                 </label>
                 <input
@@ -134,14 +137,14 @@ function CartContent() {
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
                   placeholder="e.g., Smith Family, Birthday Party"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-burgundy focus:border-transparent"
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-base focus:border-gold focus:outline-none font-semibold"
                 />
               </div>
             </div>
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+              <div className="bg-red-50 border-2 border-red-200 text-red-700 px-6 py-4 rounded-xl mb-6 font-semibold">
                 {error}
               </div>
             )}
@@ -150,16 +153,25 @@ function CartContent() {
             <button
               type="submit"
               disabled={submitting || items.length === 0}
-              className="w-full bg-burgundy text-white py-4 px-6 rounded-lg hover:bg-burgundy-dark transition-colors font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-pill-burgundy w-full text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? 'Submitting Order...' : 'Submit Order'}
             </button>
 
-            <p className="text-sm text-gray-600 text-center mt-4">
+            <p className="text-sm text-gray-500 text-center mt-6 font-semibold">
               Your order will be sent to the bartender immediately
             </p>
           </form>
         )}
+
+        <OrderConfirmationModal
+          isOpen={showConfirmation}
+          orderNumber={confirmedOrderNumber}
+          onClose={() => {
+            setShowConfirmation(false);
+            router.push('/');
+          }}
+        />
       </div>
     </div>
   );

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate PWA Icons - The Connersseur</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #F5F5DC;
+      color: #333;
+    }
+    h1 {
+      color: #8B1538;
+      text-align: center;
+    }
+    .info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border: 2px solid #8B1538;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    button {
+      background: #8B1538;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #6B0F28;
+    }
+    .preview {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .preview-item {
+      text-align: center;
+    }
+    canvas {
+      border: 2px solid #8B1538;
+      border-radius: 8px;
+      background: white;
+    }
+    .success {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 20px 0;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍷 Generate PWA Icons</h1>
+
+  <div class="info">
+    <h2>Instructions:</h2>
+    <ol>
+      <li>Click the buttons below to generate and download the PWA icons</li>
+      <li>Save the downloaded files to the <code>/public</code> directory</li>
+      <li>Make sure they're named exactly: <code>icon-192.png</code> and <code>icon-512.png</code></li>
+      <li>The 404 errors will disappear and PWA install will work correctly</li>
+    </ol>
+  </div>
+
+  <div class="buttons">
+    <button onclick="generateIcon(192)">Download icon-192.png</button>
+    <button onclick="generateIcon(512)">Download icon-512.png</button>
+    <button onclick="generateBoth()">Download Both</button>
+  </div>
+
+  <div id="success" class="success">
+    Icon downloaded successfully! Save it to the /public directory.
+  </div>
+
+  <div class="preview">
+    <div class="preview-item">
+      <p>192x192 Preview:</p>
+      <canvas id="canvas192" width="192" height="192"></canvas>
+    </div>
+    <div class="preview-item">
+      <p>512x512 Preview:</p>
+      <canvas id="canvas512" width="512" height="512"></canvas>
+    </div>
+  </div>
+
+  <script>
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      const cornerRadius = size * 0.125; // 12.5% of size
+
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+
+      // Draw rounded rectangle background
+      ctx.fillStyle = '#8B1538';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, cornerRadius);
+      ctx.fill();
+
+      // Center point
+      const cx = size / 2;
+      const cy = size / 2;
+
+      // Scale factor for the wine glass
+      const scale = size / 512;
+
+      // Draw wine glass
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+
+      // Glass bowl
+      ctx.fillStyle = '#D4AF37';
+      ctx.strokeStyle = '#F5F5DC';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(-60, -120);
+      ctx.quadraticCurveTo(-70, -80, -60, -40);
+      ctx.lineTo(-40, 60);
+      ctx.lineTo(40, 60);
+      ctx.lineTo(60, -40);
+      ctx.quadraticCurveTo(70, -80, 60, -120);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Wine inside glass (semi-transparent)
+      ctx.fillStyle = 'rgba(139, 21, 56, 0.3)';
+      ctx.beginPath();
+      ctx.moveTo(-55, -100);
+      ctx.quadraticCurveTo(-60, -70, -55, -45);
+      ctx.lineTo(-38, 50);
+      ctx.lineTo(38, 50);
+      ctx.lineTo(55, -45);
+      ctx.quadraticCurveTo(60, -70, 55, -100);
+      ctx.closePath();
+      ctx.fill();
+
+      // Stem
+      ctx.fillStyle = '#D4AF37';
+      ctx.fillRect(-8, 60, 16, 80);
+      ctx.strokeRect(-8, 60, 16, 80);
+
+      // Base (ellipse)
+      ctx.beginPath();
+      ctx.ellipse(0, 150, 50, 12, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+
+      // Add text for larger icon
+      if (size >= 512) {
+        ctx.fillStyle = '#F5F5DC';
+        ctx.font = 'bold 32px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('The Connersseur', cx, size - 32);
+      }
+    }
+
+    function generateIcon(size) {
+      const canvas = document.getElementById(`canvas${size}`);
+      drawIcon(canvas, size);
+
+      // Convert to blob and download
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `icon-${size}.png`;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        // Show success message
+        const success = document.getElementById('success');
+        success.style.display = 'block';
+        setTimeout(() => {
+          success.style.display = 'none';
+        }, 3000);
+      });
+    }
+
+    function generateBoth() {
+      generateIcon(192);
+      setTimeout(() => generateIcon(512), 500);
+    }
+
+    // Draw previews on page load
+    window.onload = function() {
+      drawIcon(document.getElementById('canvas192'), 192);
+      drawIcon(document.getElementById('canvas512'), 512);
+    };
+  </script>
+</body>
+</html>

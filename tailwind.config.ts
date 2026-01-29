@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         burgundy: {
           DEFAULT: '#8B1538',
-          dark: '#6B0F2A',
+          dark: '#6A0F2A',
           light: '#A8234D',
         },
         gold: {
@@ -28,6 +28,20 @@ const config: Config = {
       fontFamily: {
         script: ['Pacifico', 'cursive'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      fontWeight: {
+        extrabold: '800',
+      },
+      boxShadow: {
+        'card': '0 1px 3px rgba(0, 0, 0, 0.12), 0 10px 40px rgba(139, 21, 56, 0.08)',
+        'card-hover': '0 15px 60px rgba(139, 21, 56, 0.15)',
+        'header': '0 8px 24px rgba(139, 21, 56, 0.2)',
+        'gold': '0 4px 16px rgba(255, 215, 0, 0.4)',
+        'gold-hover': '0 8px 24px rgba(255, 215, 0, 0.5)',
+      },
+      borderRadius: {
+        '2xl': '20px',
+        '3xl': '24px',
       },
     },
   },

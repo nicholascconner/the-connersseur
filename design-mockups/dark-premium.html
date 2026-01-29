@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Mode Premium Bar - The Connersseur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0F0F0F;
+      min-height: 100vh;
+      color: #FFFFFF;
+    }
+
+    /* Header */
+    .header {
+      background: #1A1A1A;
+      border-bottom: 2px solid #8B1538;
+      box-shadow: 0 4px 20px rgba(139, 21, 56, 0.2);
+      padding: 32px 24px;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      color: #FFD700;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      color: #999;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      color: #FFD700;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:hover {
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+      border-color: #FFD700;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .filter-label {
+      color: #999;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .filter-select {
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: #FFFFFF;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+
+    .search-section {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .search-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .search-input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      font-size: 15px;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #8B1538;
+      box-shadow: 0 0 20px rgba(139, 21, 56, 0.3);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #666;
+    }
+
+    .search-badge {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(139, 21, 56, 0.2);
+      color: #8B1538;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      max-width: 1400px;
+      margin: 48px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .stat-card.new {
+      border-color: #FFD700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .stat-card.in-progress {
+      border-color: #8B1538;
+      box-shadow: 0 0 20px rgba(139, 21, 56, 0.3);
+    }
+
+    .stat-card.completed {
+      border-color: #48BB78;
+      box-shadow: 0 0 20px rgba(72, 187, 120, 0.2);
+    }
+
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+    }
+
+    .stat-value {
+      font-size: 42px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Orders Section */
+    .orders-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .column-header {
+      font-size: 16px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 20px;
+      padding: 16px 20px;
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      border-radius: 12px;
+      border: 1px solid #333;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .order-card {
+      background: linear-gradient(145deg, #1A1A1A, #252525);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .order-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .order-card.new {
+      border-color: #FFD700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .order-card.in-progress {
+      border-color: #8B1538;
+      box-shadow: 0 0 20px rgba(139, 21, 56, 0.3);
+    }
+
+    .order-card.completed {
+      border-color: #48BB78;
+      box-shadow: 0 0 20px rgba(72, 187, 120, 0.2);
+      opacity: 0.6;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2A2A2A;
+    }
+
+    .order-number {
+      font-size: 11px;
+      color: #FFD700;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .order-time {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .guest-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .group-name {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+
+    .drinks-list {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .drink-item {
+      padding: 14px;
+      background: rgba(139, 21, 56, 0.1);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid #8B1538;
+    }
+
+    .drink-name {
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .drink-notes {
+      font-size: 13px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #4299E1, #3182CE);
+      border-color: #4299E1;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
+    }
+
+    .btn-start:hover {
+      box-shadow: 0 0 30px rgba(66, 153, 225, 0.6);
+    }
+
+    .btn-complete {
+      background: linear-gradient(135deg, #48BB78, #38A169);
+      border-color: #48BB78;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(72, 187, 120, 0.4);
+    }
+
+    .btn-complete:hover {
+      box-shadow: 0 0 30px rgba(72, 187, 120, 0.6);
+    }
+
+    .mockup-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #8B1538, #6A0F2A);
+      color: #FFD700;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(139, 21, 56, 0.5);
+      border: 1px solid #8B1538;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <div class="header-top">
+        <div>
+          <h1>The Connersseur</h1>
+          <div class="header-subtitle">Bartender Dashboard</div>
+        </div>
+        <div class="header-controls">
+          <button class="btn">📊 Export</button>
+          <button class="btn">☀️</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <span class="filter-label">Showing</span>
+        <select class="filter-select">
+          <option>This Week</option>
+          <option>Today</option>
+          <option>This Month</option>
+          <option>All Time</option>
+        </select>
+      </div>
+
+      <div class="search-section">
+        <div class="search-wrapper">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search orders, guests, drinks...">
+            <span class="search-badge">Auto</span>
+          </div>
+          <button class="btn">☑️ Bulk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🍸</div>
+      <div class="stat-value">42</div>
+      <div class="stat-label">Total Drinks</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-value">15</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card new">
+      <div class="stat-icon">🆕</div>
+      <div class="stat-value">3</div>
+      <div class="stat-label">New</div>
+    </div>
+    <div class="stat-card in-progress">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value">5</div>
+      <div class="stat-label">In Progress</div>
+    </div>
+    <div class="stat-card completed">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value">6</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">❌</div>
+      <div class="stat-value">1</div>
+      <div class="stat-label">Cancelled</div>
+    </div>
+  </div>
+
+  <!-- Orders Columns -->
+  <div class="orders-container">
+    <div class="columns">
+      <!-- New Orders -->
+      <div class="column">
+        <div class="column-header">🆕 New (3)</div>
+
+        <div class="order-card new">
+          <div class="order-header">
+            <div class="order-number">Order #127</div>
+            <div class="order-time">2:45 PM</div>
+          </div>
+          <div class="guest-name">Sarah Martinez</div>
+          <div class="group-name">Birthday Party</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">2× Classic Martini</div>
+              <div class="drink-notes">Extra dry, with olives</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">1× Espresso Martini</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-start">Start</button>
+          </div>
+        </div>
+
+        <div class="order-card new">
+          <div class="order-header">
+            <div class="order-number">Order #128</div>
+            <div class="order-time">2:48 PM</div>
+          </div>
+          <div class="guest-name">James Wilson</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">1× Old Fashioned</div>
+              <div class="drink-notes">Light ice please</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-start">Start</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress -->
+      <div class="column">
+        <div class="column-header">⏳ In Progress (5)</div>
+
+        <div class="order-card in-progress">
+          <div class="order-header">
+            <div class="order-number">Order #124</div>
+            <div class="order-time">2:30 PM</div>
+          </div>
+          <div class="guest-name">Michael Chen</div>
+          <div class="group-name">Corporate Event</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">3× Manhattan</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">2× Whiskey Sour</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-complete">Complete</button>
+          </div>
+        </div>
+
+        <div class="order-card in-progress">
+          <div class="order-header">
+            <div class="order-number">Order #125</div>
+            <div class="order-time">2:35 PM</div>
+          </div>
+          <div class="guest-name">Emma Thompson</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">1× Cosmopolitan</div>
+            </li>
+            <li class="drink-item">
+              <div class="drink-name">1× Moscow Mule</div>
+            </li>
+          </ul>
+          <div class="order-actions">
+            <button class="action-btn btn-complete">Complete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completed -->
+      <div class="column">
+        <div class="column-header">✅ Completed (6)</div>
+
+        <div class="order-card completed">
+          <div class="order-header">
+            <div class="order-number">Order #123</div>
+            <div class="order-time">2:25 PM</div>
+          </div>
+          <div class="guest-name">David Park</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">2× Margarita</div>
+              <div class="drink-notes">Salt rim</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="order-card completed">
+          <div class="order-header">
+            <div class="order-number">Order #122</div>
+            <div class="order-time">2:20 PM</div>
+          </div>
+          <div class="guest-name">Lisa Anderson</div>
+          <div class="group-name">Girls Night</div>
+          <ul class="drinks-list">
+            <li class="drink-item">
+              <div class="drink-name">4× Mojito</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup-badge">
+    Design #3: Dark Mode Premium Bar
+  </div>
+</body>
+</html>

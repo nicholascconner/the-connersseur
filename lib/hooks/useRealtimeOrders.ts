@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { OrderWithItems, Order, OrderItem } from '@/types';
+import { DateFilter, getDateRange } from '@/lib/utils/dateFilters';
 
-export function useRealtimeOrders() {
+export function useRealtimeOrders(dateFilter: DateFilter = 'week') {
   const [orders, setOrders] = useState<OrderWithItems[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,10 +16,20 @@ export function useRealtimeOrders() {
       setLoading(true);
       setError(null);
 
-      const { data: ordersData, error: ordersError } = await supabase
-        .from('orders')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Apply date filtering
+      const { start, end } = getDateRange(dateFilter);
+      let query = supabase.from('orders').select('*');
+
+      if (start) {
+        query = query.gte('created_at', start.toISOString());
+      }
+      if (end) {
+        query = query.lte('created_at', end.toISOString());
+      }
+
+      const { data: ordersData, error: ordersError } = await query.order('created_at', {
+        ascending: false,
+      });
 
       if (ordersError) throw ordersError;
 
@@ -76,7 +87,7 @@ export function useRealtimeOrders() {
     return () => {
       supabase.removeChannel(ordersChannel);
     };
-  }, []);
+  }, [dateFilter]);
 
   return { orders, loading, error, refetch: fetchOrders };
 }

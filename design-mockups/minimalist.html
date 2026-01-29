@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimalist Premium - The Connersseur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+      color: #2D2D2D;
+    }
+
+    /* Header */
+    .header {
+      background: #ffffff;
+      border-bottom: 1px solid #E5E5E5;
+      padding: 40px 24px 32px;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: #8B1538;
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 32px;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .filter-label {
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .filter-select {
+      background: #ffffff;
+      border: none;
+      border-bottom: 3px solid #FFD700;
+      padding: 8px 16px 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #8B1538;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-export {
+      background: none;
+      border: 2px solid #8B1538;
+      color: #8B1538;
+      padding: 10px 24px;
+      border-radius: 0;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .btn-export:hover {
+      background: #8B1538;
+      color: #ffffff;
+    }
+
+    .search-section {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .search-wrapper {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 16px 16px 44px;
+      border: none;
+      border-bottom: 2px solid #E5E5E5;
+      background: #ffffff;
+      font-size: 16px;
+      color: #2D2D2D;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-bottom-color: #8B1538;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #999;
+    }
+
+    .search-badge {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .btn-bulk {
+      background: none;
+      border: 2px solid #E5E5E5;
+      color: #666;
+      padding: 14px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-bulk:hover {
+      border-color: #8B1538;
+      color: #8B1538;
+    }
+
+    /* Stats Grid */
+    .stats-section {
+      max-width: 1400px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    .stat-card {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 56px;
+      font-weight: 700;
+      color: #8B1538;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-divider {
+      height: 3px;
+      width: 40px;
+      background: #FFD700;
+      margin: 12px auto 0;
+    }
+
+    /* Orders Section */
+    .orders-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .orders-list {
+      list-style: none;
+    }
+
+    .order-item {
+      background: #ffffff;
+      border-left: 4px solid #8B1538;
+      margin-bottom: 12px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .order-item:hover {
+      border-left-width: 8px;
+      padding-left: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-item.in-progress {
+      border-left-color: #4299E1;
+    }
+
+    .order-item.completed {
+      border-left-color: #48BB78;
+      opacity: 0.6;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .order-number {
+      font-size: 11px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .order-time {
+      font-size: 12px;
+      color: #BBB;
+    }
+
+    .guest-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2D2D2D;
+      margin-bottom: 4px;
+    }
+
+    .group-name {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .drinks-list {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .drink-item {
+      padding: 16px 0;
+      border-top: 1px solid #F5F5F5;
+    }
+
+    .drink-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .drink-name {
+      font-weight: 600;
+      color: #2D2D2D;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .drink-notes {
+      font-size: 13px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid #2D2D2D;
+      background: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s ease;
+      color: #2D2D2D;
+    }
+
+    .action-btn:hover {
+      background: #2D2D2D;
+      color: #ffffff;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-top: 48px;
+    }
+
+    .column-header {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2D2D2D;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #FFD700;
+    }
+
+    .mockup-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #8B1538;
+      color: #ffffff;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <h1>The Connersseur</h1>
+      <div class="header-subtitle">Bartender Dashboard</div>
+
+      <div class="filters">
+        <span class="filter-label">Showing</span>
+        <select class="filter-select">
+          <option>This Week</option>
+          <option>Today</option>
+          <option>This Month</option>
+          <option>All Time</option>
+        </select>
+        <button class="btn-export">Export CSV</button>
+      </div>
+
+      <div class="search-section">
+        <div class="search-wrapper">
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search orders, guests, or drinks">
+            <span class="search-badge">Auto-filtering</span>
+          </div>
+          <button class="btn-bulk">☑️ Bulk Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">42</div>
+        <div class="stat-label">Total Drinks</div>
+        <div class="stat-divider"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15</div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-divider"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">New</div>
+        <div class="stat-divider"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">In Progress</div>
+        <div class="stat-divider"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6</div>
+        <div class="stat-label">Completed</div>
+        <div class="stat-divider"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1</div>
+        <div class="stat-label">Cancelled</div>
+        <div class="stat-divider"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders -->
+  <div class="orders-container">
+    <div class="columns">
+      <!-- New Orders -->
+      <div>
+        <div class="column-header">New Orders</div>
+        <ul class="orders-list">
+          <li class="order-item">
+            <div class="order-header">
+              <div class="order-number">Order #127</div>
+              <div class="order-time">2:45 PM</div>
+            </div>
+            <div class="guest-name">Sarah Martinez</div>
+            <div class="group-name">Birthday Party</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">2× Classic Martini</div>
+                <div class="drink-notes">Extra dry, with olives</div>
+              </li>
+              <li class="drink-item">
+                <div class="drink-name">1× Espresso Martini</div>
+              </li>
+            </ul>
+            <div class="order-actions">
+              <button class="action-btn">Start Order</button>
+            </div>
+          </li>
+
+          <li class="order-item">
+            <div class="order-header">
+              <div class="order-number">Order #128</div>
+              <div class="order-time">2:48 PM</div>
+            </div>
+            <div class="guest-name">James Wilson</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">1× Old Fashioned</div>
+                <div class="drink-notes">Light ice please</div>
+              </li>
+            </ul>
+            <div class="order-actions">
+              <button class="action-btn">Start Order</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- In Progress -->
+      <div>
+        <div class="column-header">In Progress</div>
+        <ul class="orders-list">
+          <li class="order-item in-progress">
+            <div class="order-header">
+              <div class="order-number">Order #124</div>
+              <div class="order-time">2:30 PM</div>
+            </div>
+            <div class="guest-name">Michael Chen</div>
+            <div class="group-name">Corporate Event</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">3× Manhattan</div>
+              </li>
+              <li class="drink-item">
+                <div class="drink-name">2× Whiskey Sour</div>
+              </li>
+            </ul>
+            <div class="order-actions">
+              <button class="action-btn">Complete</button>
+            </div>
+          </li>
+
+          <li class="order-item in-progress">
+            <div class="order-header">
+              <div class="order-number">Order #125</div>
+              <div class="order-time">2:35 PM</div>
+            </div>
+            <div class="guest-name">Emma Thompson</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">1× Cosmopolitan</div>
+              </li>
+              <li class="drink-item">
+                <div class="drink-name">1× Moscow Mule</div>
+              </li>
+            </ul>
+            <div class="order-actions">
+              <button class="action-btn">Complete</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Completed -->
+      <div>
+        <div class="column-header">Completed</div>
+        <ul class="orders-list">
+          <li class="order-item completed">
+            <div class="order-header">
+              <div class="order-number">Order #123</div>
+              <div class="order-time">2:25 PM</div>
+            </div>
+            <div class="guest-name">David Park</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">2× Margarita</div>
+                <div class="drink-notes">Salt rim</div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="order-item completed">
+            <div class="order-header">
+              <div class="order-number">Order #122</div>
+              <div class="order-time">2:20 PM</div>
+            </div>
+            <div class="guest-name">Lisa Anderson</div>
+            <div class="group-name">Girls Night</div>
+            <ul class="drinks-list">
+              <li class="drink-item">
+                <div class="drink-name">4× Mojito</div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup-badge">
+    Design #2: Minimalist Premium
+  </div>
+</body>
+</html>
