@@ -102,6 +102,13 @@
       font-weight: 700;
       display: inline-block;
       word-break: break-all;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .url-display:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(139, 21, 56, 0.4);
     }
 
     .instructions {
@@ -237,7 +244,7 @@
         <div class="qr-wrapper">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-connersseur.vercel.app&color=8B1538" alt="Menu QR Code" class="qr-code">
         </div>
-        <div class="url-display">the-connersseur.vercel.app</div>
+        <a href="https://the-connersseur.vercel.app" target="_blank" class="url-display">the-connersseur.vercel.app</a>
         <div class="instructions">Point your camera at the QR code</div>
       </div>
 
@@ -249,7 +256,7 @@
         <div class="qr-wrapper">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-connersseur.vercel.app/bartender&color=8B1538" alt="Bartender QR Code" class="qr-code">
         </div>
-        <div class="url-display">the-connersseur.vercel.app/bartender</div>
+        <a href="https://the-connersseur.vercel.app/bartender" target="_blank" class="url-display">the-connersseur.vercel.app/bartender</a>
         <div class="instructions">Password: connersseur</div>
       </div>
     </div>
