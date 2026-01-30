@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Connersseur - QR Codes</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #FFD700;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 40px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 30px;
+    }
+
+    .qr-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qr-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #8B1538, #FFD700);
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .card-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.2rem;
+      color: #8B1538;
+      margin-bottom: 5px;
+    }
+
+    .card-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      font-weight: 600;
+      margin-bottom: 25px;
+    }
+
+    .qr-wrapper {
+      background: #f8f8f8;
+      border-radius: 16px;
+      padding: 20px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .qr-code {
+      width: 200px;
+      height: 200px;
+    }
+
+    .url-display {
+      background: linear-gradient(135deg, #8B1538, #6d1029);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-block;
+      word-break: break-all;
+    }
+
+    .instructions {
+      margin-top: 15px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+        padding: 20px;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .qr-card {
+        box-shadow: none;
+        border: 2px solid #eee;
+        padding: 30px;
+        page-break-inside: avoid;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Single card print option */
+    .print-buttons {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .print-btn {
+      background: linear-gradient(135deg, #8B1538, #6d1029);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(139, 21, 56, 0.4);
+    }
+
+    .print-btn.gold {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #1a1a1a;
+    }
+
+    /* Table tent style - for printing and folding */
+    .table-tent {
+      background: white;
+      border-radius: 24px;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      margin-top: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .table-tent::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #8B1538, #FFD700);
+    }
+
+    .table-tent .logo-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: #8B1538;
+      margin-bottom: 10px;
+    }
+
+    .table-tent .tagline {
+      color: #666;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .table-tent .qr-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .table-tent .qr-item {
+      text-align: center;
+    }
+
+    .table-tent .qr-label {
+      font-weight: 800;
+      color: #8B1538;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="no-print">The Connersseur - Shareable QR Codes</h1>
+
+    <div class="print-buttons no-print">
+      <button class="print-btn" onclick="window.print()">🖨️ Print All</button>
+      <button class="print-btn gold" onclick="copyMenuLink()">📋 Copy Menu Link</button>
+      <button class="print-btn gold" onclick="copyBartenderLink()">📋 Copy Bartender Link</button>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Guest Menu Card -->
+      <div class="qr-card">
+        <div class="card-icon">🍸</div>
+        <div class="card-title">The Connersseur</div>
+        <div class="card-subtitle">Scan to Order Drinks</div>
+        <div class="qr-wrapper">
+          <canvas id="qr-menu" class="qr-code"></canvas>
+        </div>
+        <div class="url-display">the-connersseur.vercel.app</div>
+        <div class="instructions">Point your camera at the QR code</div>
+      </div>
+
+      <!-- Bartender Card -->
+      <div class="qr-card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Bartender</div>
+        <div class="card-subtitle">Dashboard Access</div>
+        <div class="qr-wrapper">
+          <canvas id="qr-bartender" class="qr-code"></canvas>
+        </div>
+        <div class="url-display">the-connersseur.vercel.app/bartender</div>
+        <div class="instructions">Password: connersseur</div>
+      </div>
+    </div>
+
+    <!-- Combined Table Tent -->
+    <div class="table-tent">
+      <div class="logo-text">The Connersseur</div>
+      <div class="tagline">Crafted Cocktails & Fine Drinks</div>
+      <div class="qr-row">
+        <div class="qr-item">
+          <div class="qr-wrapper">
+            <canvas id="qr-menu-2" class="qr-code"></canvas>
+          </div>
+          <div class="qr-label">📱 Scan to Order</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuUrl = 'https://the-connersseur.vercel.app';
+    const bartenderUrl = 'https://the-connersseur.vercel.app/bartender';
+
+    // Generate QR codes
+    QRCode.toCanvas(document.getElementById('qr-menu'), menuUrl, {
+      width: 200,
+      margin: 0,
+      color: { dark: '#8B1538', light: '#ffffff' }
+    });
+
+    QRCode.toCanvas(document.getElementById('qr-bartender'), bartenderUrl, {
+      width: 200,
+      margin: 0,
+      color: { dark: '#8B1538', light: '#ffffff' }
+    });
+
+    QRCode.toCanvas(document.getElementById('qr-menu-2'), menuUrl, {
+      width: 200,
+      margin: 0,
+      color: { dark: '#8B1538', light: '#ffffff' }
+    });
+
+    function copyMenuLink() {
+      navigator.clipboard.writeText(menuUrl);
+      alert('Menu link copied!');
+    }
+
+    function copyBartenderLink() {
+      navigator.clipboard.writeText(bartenderUrl);
+      alert('Bartender link copied!');
+    }
+  </script>
+</body>
+</html>
