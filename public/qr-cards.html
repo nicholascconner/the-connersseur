@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Connersseur - QR Codes</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
@@ -91,6 +90,7 @@
     .qr-code {
       width: 200px;
       height: 200px;
+      display: block;
     }
 
     .url-display {
@@ -235,7 +235,7 @@
         <div class="card-title">The Connersseur</div>
         <div class="card-subtitle">Scan to Order Drinks</div>
         <div class="qr-wrapper">
-          <canvas id="qr-menu" class="qr-code"></canvas>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-connersseur.vercel.app&color=8B1538" alt="Menu QR Code" class="qr-code">
         </div>
         <div class="url-display">the-connersseur.vercel.app</div>
         <div class="instructions">Point your camera at the QR code</div>
@@ -247,7 +247,7 @@
         <div class="card-title">Bartender</div>
         <div class="card-subtitle">Dashboard Access</div>
         <div class="qr-wrapper">
-          <canvas id="qr-bartender" class="qr-code"></canvas>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-connersseur.vercel.app/bartender&color=8B1538" alt="Bartender QR Code" class="qr-code">
         </div>
         <div class="url-display">the-connersseur.vercel.app/bartender</div>
         <div class="instructions">Password: connersseur</div>
@@ -261,7 +261,7 @@
       <div class="qr-row">
         <div class="qr-item">
           <div class="qr-wrapper">
-            <canvas id="qr-menu-2" class="qr-code"></canvas>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://the-connersseur.vercel.app&color=8B1538" alt="Menu QR Code" class="qr-code">
           </div>
           <div class="qr-label">📱 Scan to Order</div>
         </div>
@@ -272,25 +272,6 @@
   <script>
     const menuUrl = 'https://the-connersseur.vercel.app';
     const bartenderUrl = 'https://the-connersseur.vercel.app/bartender';
-
-    // Generate QR codes
-    QRCode.toCanvas(document.getElementById('qr-menu'), menuUrl, {
-      width: 200,
-      margin: 0,
-      color: { dark: '#8B1538', light: '#ffffff' }
-    });
-
-    QRCode.toCanvas(document.getElementById('qr-bartender'), bartenderUrl, {
-      width: 200,
-      margin: 0,
-      color: { dark: '#8B1538', light: '#ffffff' }
-    });
-
-    QRCode.toCanvas(document.getElementById('qr-menu-2'), menuUrl, {
-      width: 200,
-      margin: 0,
-      color: { dark: '#8B1538', light: '#ffffff' }
-    });
 
     function copyMenuLink() {
       navigator.clipboard.writeText(menuUrl);
