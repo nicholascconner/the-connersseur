@@ -285,6 +285,9 @@ function BartenderDashboardContent() {
             <button onClick={handleExportOrders} className="btn-pill-gold text-sm">
               Export
             </button>
+            <Link href="/bartender/menu" className="btn-pill-gold text-sm">
+              Manage Menu
+            </Link>
             <Link href="/" className="btn-pill-gold text-sm">
               Menu
             </Link>
