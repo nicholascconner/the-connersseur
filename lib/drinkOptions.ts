@@ -6,8 +6,8 @@ export interface DrinkOptionGroup {
 export const DRINK_OPTIONS: Record<string, DrinkOptionGroup[]> = {
   'martini': [
     { label: 'Alcohol', options: ['Gin', 'Vodka'] },
-    { label: 'Level of Dirt', options: ['None', 'Some', 'Extra', 'Filthy'] },
     { label: 'Vermouth', options: ['Bone Dry', 'Spray', 'Standard', 'Wet'] },
+    { label: 'Olive Juice', options: ['None', 'Some', 'Extra', 'Filthy'] },
     { label: 'Garnish', options: ['Garlic Olives', 'Blue Cheese Olives', 'Feta Olives', 'Regular Olives', 'Lemon Peel'] },
   ],
   'old fashioned': [
@@ -24,7 +24,9 @@ export function serializeDrinkOptions(
   selections: Record<string, string>,
   additionalNotes: string
 ): string {
-  const parts = Object.values(selections).filter(v => v !== '');
+  const parts = Object.entries(selections)
+    .filter(([, v]) => v !== '')
+    .map(([label, v]) => `${label}: ${v}`);
   let result = parts.join(' | ');
   if (additionalNotes.trim()) {
     result = result ? `${result}\n${additionalNotes.trim()}` : additionalNotes.trim();

@@ -27,7 +27,10 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
     }
   };
 
+  const allOptionsSelected = !drinkOptions || drinkOptions.every(g => selections[g.label] !== '' && selections[g.label] !== undefined);
+
   const handleAdd = () => {
+    if (!allOptionsSelected) return;
     let finalNotes = notes;
     if (drinkOptions) {
       finalNotes = serializeDrinkOptions(selections, notes);
@@ -156,7 +159,8 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
               </button>
               <button
                 onClick={handleAdd}
-                className="btn-pill-burgundy flex-1"
+                disabled={!allOptionsSelected}
+                className={`flex-1 ${allOptionsSelected ? 'btn-pill-burgundy' : 'bg-gray-300 text-gray-500 py-4 px-6 rounded-xl font-bold cursor-not-allowed'}`}
               >
                 Add to Cart
               </button>
