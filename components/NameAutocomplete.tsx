@@ -18,7 +18,7 @@ export default function NameAutocomplete({ value, onChange, required = false }: 
   // Load last used name from localStorage on mount
   useEffect(() => {
     if (!value) {
-      const lastUsedName = localStorage.getItem('connersseur_last_name');
+      const lastUsedName = localStorage.getItem('connerseur_last_name');
       if (lastUsedName) {
         onChange(lastUsedName);
       }

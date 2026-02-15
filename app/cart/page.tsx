@@ -60,7 +60,7 @@ function CartContent() {
 
       const data = await response.json();
 
-      localStorage.setItem('connersseur_last_name', guestName.trim());
+      localStorage.setItem('connerseur_last_name', guestName.trim());
       clearCart();
 
       setConfirmedOrderNumber(data.order.order_number || 0);

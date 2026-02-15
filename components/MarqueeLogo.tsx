@@ -14,8 +14,8 @@ export default function MarqueeLogo({ size = 'large' }: MarqueeLogoProps) {
   return (
     <div className={`${sizeClasses[size]} mx-auto`}>
       <Image
-        src="/logo-connersseur.png"
-        alt="The Connersseur"
+        src="/logo-connerseur.png"
+        alt="The Connerseur"
         width={2360}
         height={1640}
         className="w-full h-auto"

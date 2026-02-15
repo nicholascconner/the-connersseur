@@ -1,4 +1,4 @@
-# The Connersseur
+# The Connerseur
 
 A production-quality cocktail menu and ordering system with real-time bartender dashboard. Built with Next.js, TypeScript, Tailwind CSS, and Supabase.
 
@@ -34,7 +34,7 @@ A production-quality cocktail menu and ordering system with real-time bartender 
 ### 1. Install Dependencies
 
 ```bash
-cd the-connersseur
+cd the-connerseur
 npm install
 ```
 
@@ -103,7 +103,7 @@ Replace `your-secret-key-here` with the value you set in `.env.local`.
 ## Project Structure
 
 ```
-the-connersseur/
+the-connerseur/
 ├── app/                          # Next.js app directory
 │   ├── api/                      # API routes
 │   │   ├── menu/                 # GET menu items
@@ -181,7 +181,7 @@ the-connersseur/
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/yourusername/the-connersseur.git
+git remote add origin https://github.com/yourusername/the-connerseur.git
 git push -u origin main
 ```
 
@@ -209,14 +209,14 @@ In Vercel dashboard:
 
 After deployment, you'll get a URL like:
 ```
-https://the-connersseur.vercel.app
+https://the-connerseur.vercel.app
 ```
 
 ## Creating a QR Code
 
 ### Option 1: Online QR Code Generator
 1. Visit https://www.qr-code-generator.com/
-2. Paste your production URL: `https://the-connersseur.vercel.app`
+2. Paste your production URL: `https://the-connerseur.vercel.app`
 3. Customize color scheme (burgundy/gold to match branding)
 4. Download as PNG or PDF
 5. Print and display at your bar/event
@@ -239,20 +239,20 @@ https://the-connersseur.vercel.app
 ### Via Text/Email
 Simply share your production URL:
 ```
-Order drinks at: https://the-connersseur.vercel.app
+Order drinks at: https://the-connerseur.vercel.app
 ```
 
 ### Social Media
 Create a short message:
 ```
-🍹 Welcome to The Connersseur!
+🍹 Welcome to The Connerseur!
 Browse our menu and order drinks: [your-url]
 ```
 
 ### Shortened URL (Optional)
 Use https://bit.ly or https://tinyurl.com to create a memorable short link:
-- Original: `https://the-connersseur.vercel.app`
-- Shortened: `https://bit.ly/connersseur`
+- Original: `https://the-connerseur.vercel.app`
+- Shortened: `https://bit.ly/connerseur`
 
 ## Accessing the Bartender Dashboard
 
@@ -369,4 +369,4 @@ For issues or questions, check the code comments or create an issue on GitHub.
 
 ---
 
-**Enjoy The Connersseur! 🍸**
+**Enjoy The Connerseur! 🍸**

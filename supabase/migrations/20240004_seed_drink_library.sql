@@ -1,4 +1,4 @@
--- Expand The Connersseur drink library with classic cocktails, wines, beers, spirits, and non-alcoholic options
+-- Expand The Connerseur drink library with classic cocktails, wines, beers, spirits, and non-alcoholic options
 -- Existing 15 drinks remain untouched (they are already is_active = true)
 -- New drinks start as is_active = false (available in library, not on menu until bartender activates them)
 

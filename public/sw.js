@@ -1,5 +1,5 @@
-// Service Worker for The Connersseur PWA
-const CACHE_NAME = 'connersseur-v2';
+// Service Worker for The Connerseur PWA
+const CACHE_NAME = 'connerseur-v2';
 
 // Install event - cache essential assets
 self.addEventListener('install', (event) => {
@@ -7,7 +7,7 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
         '/',
-        '/connersseur_icon.png',
+        '/connerseur_icon.png',
       ]);
     })
   );

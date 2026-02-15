@@ -145,7 +145,7 @@ Once the migration is applied, test each feature:
 - Filter persists across page refreshes
 
 ### CSV Export
-- Downloads file named `the_connersseur_orders_YYYY-MM-DD.csv`
+- Downloads file named `the_connerseur_orders_YYYY-MM-DD.csv`
 - Contains only completed orders
 - One row per drink (orders with multiple drinks = multiple rows)
 - Can be opened directly in Google Sheets

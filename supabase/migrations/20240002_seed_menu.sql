@@ -1,4 +1,4 @@
--- The Connersseur Menu Seed Data
+-- The Connerseur Menu Seed Data
 -- Inserts 15 classic cocktails and drinks
 
 INSERT INTO menu_items (name, description, ingredients, category, sort_order) VALUES

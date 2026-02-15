@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     const csvContent = generateOrdersCsv(ordersWithItems);
 
     // Generate filename
-    const filename = generateCsvFilename('the_connersseur_orders');
+    const filename = generateCsvFilename('the_connerseur_orders');
 
     // Return CSV as downloadable file
     return new NextResponse(csvContent, {

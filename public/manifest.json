@@ -1,6 +1,6 @@
 {
-  "name": "The Connersseur",
-  "short_name": "Connersseur",
+  "name": "The Connerseur",
+  "short_name": "Connerseur",
   "description": "Crafted cocktails and drinks menu with real-time ordering",
   "start_url": "/",
   "display": "standalone",
@@ -8,7 +8,7 @@
   "theme_color": "#8B1538",
   "icons": [
     {
-      "src": "/connersseur_icon.png",
+      "src": "/connerseur_icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }

@@ -74,7 +74,7 @@ function printOrderTicket(order: OrderWithItems) {
       </style>
     </head>
     <body>
-      <h1>The Connersseur</h1>
+      <h1>The Connerseur</h1>
       <div class="order-info">
         <div><strong>Order #${order.order_number}</strong></div>
         <div>Guest: ${order.guest_name}</div>

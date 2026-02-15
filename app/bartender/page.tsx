@@ -55,7 +55,7 @@ function BartenderDashboardContent() {
   // Login handler
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwordInput === 'connersseur') {
+    if (passwordInput === 'connerseur') {
       sessionStorage.setItem('bartender_authenticated', 'true');
       setIsAuthenticated(true);
       setLoginError('');

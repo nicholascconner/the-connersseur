@@ -8,7 +8,7 @@ interface GuestPreference {
   lastUsed: string;
 }
 
-const STORAGE_KEY = 'the_connersseur_guest_preferences';
+const STORAGE_KEY = 'the_connerseur_guest_preferences';
 
 export function useGuestPreferences() {
   const [preferences, setPreferences] = useState<Map<string, GuestPreference>>(new Map());

@@ -1,4 +1,4 @@
--- The Connersseur Initial Schema
+-- The Connerseur Initial Schema
 -- Creates tables for menu items, orders, and order items
 
 -- Enable UUID extension
