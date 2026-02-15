@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MenuItem } from '@/types';
+import { getDrinkOptions, serializeDrinkOptions, DrinkOptionGroup } from '@/lib/drinkOptions';
 
 interface DrinkCardProps {
   drink: MenuItem;
@@ -12,19 +13,44 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
   const [showModal, setShowModal] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState('');
+  const [selections, setSelections] = useState<Record<string, string>>({});
+
+  const drinkOptions = getDrinkOptions(drink.name);
+
+  const handleOpen = () => {
+    setShowModal(true);
+    // Reset selections when opening
+    if (drinkOptions) {
+      const initial: Record<string, string> = {};
+      drinkOptions.forEach(group => { initial[group.label] = ''; });
+      setSelections(initial);
+    }
+  };
 
   const handleAdd = () => {
-    onAddToCart(drink, quantity, notes);
+    let finalNotes = notes;
+    if (drinkOptions) {
+      finalNotes = serializeDrinkOptions(selections, notes);
+    }
+    onAddToCart(drink, quantity, finalNotes);
     setShowModal(false);
     setQuantity(1);
     setNotes('');
+    setSelections({});
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setQuantity(1);
+    setNotes('');
+    setSelections({});
   };
 
   return (
     <>
       <div
         className="bg-white rounded-2xl shadow-card p-6 cursor-pointer transition-all duration-300 hover:shadow-card-hover hover:scale-[1.02]"
-        onClick={() => setShowModal(true)}
+        onClick={handleOpen}
         style={{ transform: 'translateZ(0)' }}
       >
         <h3 className="text-xl font-extrabold text-gray-800 mb-2">{drink.name}</h3>
@@ -34,7 +60,7 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
           className="btn-pill-burgundy w-full text-sm"
           onClick={(e) => {
             e.stopPropagation();
-            setShowModal(true);
+            handleOpen();
           }}
         >
           Add to Cart
@@ -44,15 +70,38 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
       {showModal && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          onClick={() => setShowModal(false)}
+          onClick={handleClose}
         >
           <div
-            className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl"
+            className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-extrabold text-gray-800 mb-2">{drink.name}</h2>
             <p className="text-sm text-gray-600 mb-2">{drink.description}</p>
             <p className="text-xs text-gray-400 italic mb-6">{drink.ingredients}</p>
+
+            {/* Structured Options (Martini, Old Fashioned, etc.) */}
+            {drinkOptions && (
+              <div className="mb-6 space-y-4">
+                {drinkOptions.map((group: DrinkOptionGroup) => (
+                  <div key={group.label}>
+                    <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                      {group.label}
+                    </label>
+                    <select
+                      value={selections[group.label] || ''}
+                      onChange={(e) => setSelections(prev => ({ ...prev, [group.label]: e.target.value }))}
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none bg-white appearance-none"
+                    >
+                      <option value="">Select {group.label.toLowerCase()}...</option>
+                      {group.options.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="mb-6">
               <label htmlFor="quantity" className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
@@ -86,21 +135,21 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
 
             <div className="mb-8">
               <label htmlFor="notes" className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
-                Preferences / Notes
+                {drinkOptions ? 'Additional Notes' : 'Preferences / Notes'}
               </label>
               <textarea
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="e.g., dirty martini with garlic olives, extra dry, on the rocks..."
+                placeholder={drinkOptions ? 'Any other preferences...' : 'e.g., dirty martini with garlic olives, extra dry, on the rocks...'}
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none"
-                rows={3}
+                rows={2}
               />
             </div>
 
             <div className="flex gap-4">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={handleClose}
                 className="flex-1 bg-gray-100 text-gray-700 py-4 px-6 rounded-xl hover:bg-gray-200 transition-colors font-bold"
               >
                 Cancel

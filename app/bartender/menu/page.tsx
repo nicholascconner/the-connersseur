@@ -72,6 +72,10 @@ export default function ManageMenuPage() {
       if (!grouped[item.category]) grouped[item.category] = [];
       grouped[item.category].push(item);
     }
+    // Sort items within each category by sort_order
+    for (const category of Object.keys(grouped)) {
+      grouped[category].sort((a, b) => a.sort_order - b.sort_order);
+    }
     return grouped;
   }, [menuItems, searchQuery]);
 
@@ -153,6 +157,68 @@ export default function ManageMenuPage() {
       setSavingItems(prev => {
         const next = new Set(prev);
         ids.forEach(id => next.delete(id));
+        return next;
+      });
+    }
+  };
+
+  // Reorder a drink within its category
+  const handleReorder = async (itemId: string, direction: 'up' | 'down') => {
+    // Find the item and its category siblings
+    const item = menuItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const categoryItems = menuItems
+      .filter(i => i.category === item.category)
+      .sort((a, b) => a.sort_order - b.sort_order);
+
+    const idx = categoryItems.findIndex(i => i.id === itemId);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= categoryItems.length) return;
+
+    const swapItem = categoryItems[swapIdx];
+    const newSortA = swapItem.sort_order;
+    const newSortB = item.sort_order;
+
+    // Optimistic update
+    setMenuItems(prev => prev.map(i => {
+      if (i.id === itemId) return { ...i, sort_order: newSortA };
+      if (i.id === swapItem.id) return { ...i, sort_order: newSortB };
+      return i;
+    }));
+
+    setSavingItems(prev => {
+      const next = new Set(prev);
+      next.add(itemId);
+      next.add(swapItem.id);
+      return next;
+    });
+
+    try {
+      const response = await fetch('/api/menu/manage', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [
+            { id: itemId, sort_order: newSortA },
+            { id: swapItem.id, sort_order: newSortB },
+          ],
+          session_auth: true,
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to reorder');
+    } catch {
+      // Rollback
+      setMenuItems(prev => prev.map(i => {
+        if (i.id === itemId) return { ...i, sort_order: newSortB };
+        if (i.id === swapItem.id) return { ...i, sort_order: newSortA };
+        return i;
+      }));
+    } finally {
+      setSavingItems(prev => {
+        const next = new Set(prev);
+        next.delete(itemId);
+        next.delete(swapItem.id);
         return next;
       });
     }
@@ -299,12 +365,15 @@ export default function ManageMenuPage() {
                 {/* Items Grid */}
                 {!isCollapsed && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {items.map(item => (
+                    {items.map((item, idx) => (
                       <MenuItemToggle
                         key={item.id}
                         item={item}
                         isSaving={savingItems.has(item.id)}
+                        isFirst={idx === 0}
+                        isLast={idx === items.length - 1}
                         onToggle={handleToggle}
+                        onReorder={handleReorder}
                       />
                     ))}
                   </div>

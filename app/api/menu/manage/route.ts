@@ -47,21 +47,27 @@ export async function PATCH(request: NextRequest) {
     }
 
     for (const item of body.items) {
-      if (!item.id || typeof item.is_active !== 'boolean') {
-        return NextResponse.json({ error: 'Each item must have id and is_active' }, { status: 400 });
+      if (!item.id) {
+        return NextResponse.json({ error: 'Each item must have an id' }, { status: 400 });
+      }
+      if (typeof item.is_active !== 'boolean' && typeof item.sort_order !== 'number') {
+        return NextResponse.json({ error: 'Each item must have is_active or sort_order' }, { status: 400 });
       }
     }
 
     // Update each item
     const results = await Promise.all(
-      body.items.map((item: { id: string; is_active: boolean }) =>
-        supabaseAdmin
+      body.items.map((item: { id: string; is_active?: boolean; sort_order?: number }) => {
+        const updateData: Record<string, boolean | number> = {};
+        if (typeof item.is_active === 'boolean') updateData.is_active = item.is_active;
+        if (typeof item.sort_order === 'number') updateData.sort_order = item.sort_order;
+        return supabaseAdmin
           .from('menu_items')
-          .update({ is_active: item.is_active })
+          .update(updateData)
           .eq('id', item.id)
           .select()
-          .single()
-      )
+          .single();
+      })
     );
 
     const errors = results.filter(r => r.error);

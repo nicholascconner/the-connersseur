@@ -5,10 +5,13 @@ import { MenuItem } from '@/types';
 interface MenuItemToggleProps {
   item: MenuItem;
   isSaving: boolean;
+  isFirst: boolean;
+  isLast: boolean;
   onToggle: (id: string, newActive: boolean) => void;
+  onReorder: (id: string, direction: 'up' | 'down') => void;
 }
 
-export default function MenuItemToggle({ item, isSaving, onToggle }: MenuItemToggleProps) {
+export default function MenuItemToggle({ item, isSaving, isFirst, isLast, onToggle, onReorder }: MenuItemToggleProps) {
   return (
     <div
       className={`
@@ -18,6 +21,30 @@ export default function MenuItemToggle({ item, isSaving, onToggle }: MenuItemTog
       `}
     >
       <div className="flex items-start justify-between gap-3">
+        {/* Reorder Arrows */}
+        <div className="flex flex-col gap-1 shrink-0 mt-1">
+          <button
+            onClick={() => onReorder(item.id, 'up')}
+            disabled={isFirst || isSaving}
+            className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold transition-colors
+              ${isFirst || isSaving ? 'text-gray-200 cursor-default' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}
+            `}
+            aria-label={`Move ${item.name} up`}
+          >
+            ▲
+          </button>
+          <button
+            onClick={() => onReorder(item.id, 'down')}
+            disabled={isLast || isSaving}
+            className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold transition-colors
+              ${isLast || isSaving ? 'text-gray-200 cursor-default' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'}
+            `}
+            aria-label={`Move ${item.name} down`}
+          >
+            ▼
+          </button>
+        </div>
+
         <div className="flex-1 min-w-0">
           <h3 className={`text-lg font-extrabold mb-1 truncate ${item.is_active ? 'text-gray-800' : 'text-gray-400'}`}>
             {item.name}
