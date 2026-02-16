@@ -59,13 +59,13 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
   return (
     <>
       <div
-        className="bg-white rounded-2xl shadow-card p-6 cursor-pointer transition-all duration-300 hover:shadow-card-hover hover:scale-[1.02]"
+        className="bg-white rounded-2xl shadow-card p-6 cursor-pointer transition-all duration-300 hover:shadow-card-hover hover:scale-[1.02] flex flex-col"
         onClick={handleOpen}
         style={{ transform: 'translateZ(0)' }}
       >
         <h3 className="text-xl font-extrabold text-gray-800 mb-2">{drink.name}</h3>
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">{drink.description}</p>
-        <p className="text-xs text-gray-400 italic mb-4">{drink.ingredients}</p>
+        <p className="text-xs text-gray-400 italic mb-4 flex-1">{drink.ingredients}</p>
         <button
           className="btn-pill-burgundy w-full text-sm"
           onClick={(e) => {
