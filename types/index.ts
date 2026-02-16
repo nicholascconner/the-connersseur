@@ -17,6 +17,7 @@ export interface Order {
   order_number: number;
   guest_name: string;
   group_name: string | null;
+  phone_number: string | null;
   status: OrderStatus;
   created_at: string;
   updated_at: string;
@@ -58,6 +59,7 @@ export interface CartItem {
 export interface CreateOrderRequest {
   guest_name: string;
   group_name?: string;
+  phone_number: string;
   items: {
     menu_item_id?: string;
     item_name: string;

@@ -60,7 +60,7 @@ export default function OrderConfirmationModal({
         </div>
 
         <p className="text-sm text-gray-500">
-          The bartender will start preparing your drinks shortly
+          We'll text you updates as your drinks are prepared
         </p>
 
         <button

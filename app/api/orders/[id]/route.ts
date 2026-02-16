@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase/client';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { validateBartenderKey } from '@/lib/utils/auth';
 import { UpdateOrderStatusRequest } from '@/types';
+import { sendGuestOrderInProgressSMS, sendGuestOrderCompletedSMS } from '@/lib/sms';
 
 export async function GET(
   request: NextRequest,
@@ -78,6 +79,15 @@ export async function PATCH(
     if (error) {
       console.error('Error updating order:', error);
       return NextResponse.json({ error: 'Failed to update order' }, { status: 500 });
+    }
+
+    // Send guest SMS on status change (fire-and-forget)
+    if (data.phone_number) {
+      if (body.status === 'in_progress') {
+        sendGuestOrderInProgressSMS(data.phone_number, data.order_number);
+      } else if (body.status === 'completed') {
+        sendGuestOrderCompletedSMS(data.phone_number, data.order_number);
+      }
     }
 
     return NextResponse.json({ order: data });

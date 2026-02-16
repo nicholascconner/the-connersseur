@@ -13,6 +13,7 @@ function CartContent() {
   const router = useRouter();
   const { items, itemCount, updateQuantity, updateNotes, removeFromCart, clearCart } = useCart();
   const [guestName, setGuestName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [groupName, setGroupName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -28,6 +29,11 @@ function CartContent() {
       return;
     }
 
+    if (!phoneNumber.trim() || phoneNumber.replace(/\D/g, '').length < 10) {
+      setError('Please enter a valid phone number');
+      return;
+    }
+
     if (items.length === 0) {
       setError('Your cart is empty');
       return;
@@ -38,6 +44,7 @@ function CartContent() {
     try {
       const orderRequest: CreateOrderRequest = {
         guest_name: guestName.trim(),
+        phone_number: phoneNumber.trim(),
         group_name: groupName.trim() || undefined,
         items: items.map((item) => ({
           menu_item_id: item.menuItemId,
@@ -125,6 +132,24 @@ function CartContent() {
                   onChange={setGuestName}
                   required
                 />
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="phone-number" className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="phone-number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="(469) 555-1234"
+                  required
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-base focus:border-gold focus:outline-none font-semibold"
+                />
+                <p className="text-xs text-gray-400 mt-1 font-semibold">
+                  We'll text you when your drink is ready
+                </p>
               </div>
 
               <div>
