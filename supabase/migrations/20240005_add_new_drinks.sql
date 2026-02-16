@@ -5,27 +5,22 @@ INSERT INTO menu_items (name, description, ingredients, category, is_active, sor
 (
     'Pinot Noir',
     'Elegance over power, red fruits and floral notes abound.',
-    'e.g. light or medium body, more on the cab profile side',
+    'Premium Pinot Noir Selection',
     'Wine', false, 208
 ),
 (
     'Bordeaux Style',
     'The classic red blend modelled the world over, subtle dark fruit expression.',
-    'e.g. the age old question, left bank or right bank',
+    'Premium Bordeaux Style Selection',
     'Wine', false, 209
 ),
 (
     'Italian',
     'A history of elegance, the essence of terroir.',
-    'e.g. Brunello, chianti, Nebbiolo and more',
+    'Premium Italian Wine Selection',
     'Wine', false, 210
 )
 ON CONFLICT DO NOTHING;
-
--- UPDATE Chardonnay preference notes
-UPDATE menu_items
-SET ingredients = 'e.g. oaky, buttery, lightly toasted, crisp/clean'
-WHERE LOWER(name) = 'chardonnay';
 
 -- NEW COCKTAILS
 INSERT INTO menu_items (name, description, ingredients, category, is_active, sort_order) VALUES

@@ -4,6 +4,13 @@ import { useState } from 'react';
 import { MenuItem } from '@/types';
 import { getDrinkOptions, serializeDrinkOptions, DrinkOptionGroup } from '@/lib/drinkOptions';
 
+const NOTES_PLACEHOLDERS: Record<string, string> = {
+  'chardonnay': 'e.g. oaky, buttery, lightly toasted, crisp/clean',
+  'italian': 'e.g. Brunello, Chianti, Nebbiolo and more',
+  'bordeaux style': 'e.g. the age old question, left bank or right bank',
+  'pinot noir': 'e.g. light or medium body, more on the cab profile side',
+};
+
 interface DrinkCardProps {
   drink: MenuItem;
   onAddToCart: (drink: MenuItem, quantity: number, notes: string) => void;
@@ -144,7 +151,7 @@ export default function DrinkCard({ drink, onAddToCart }: DrinkCardProps) {
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder={drinkOptions ? 'Any other preferences...' : 'e.g., dirty martini with garlic olives, extra dry, on the rocks...'}
+                placeholder={drinkOptions ? 'Any other preferences...' : (NOTES_PLACEHOLDERS[drink.name.toLowerCase()] || 'e.g., dirty martini with garlic olives, extra dry, on the rocks...')}
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-gold focus:outline-none"
                 rows={2}
               />
