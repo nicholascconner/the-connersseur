@@ -148,7 +148,10 @@ function CartContent() {
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-base focus:border-gold focus:outline-none font-semibold"
                 />
                 <p className="text-xs text-gray-400 mt-1 font-semibold">
-                  We'll text you when your drink is ready
+                  By providing your phone number, you consent to receive a one-time SMS notification when your order is ready. Msg & data rates may apply. Reply STOP to opt out.{' '}
+                  <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
+                  {' '}|{' '}
+                  <Link href="/terms" className="underline hover:text-gray-600">Terms</Link>
                 </p>
               </div>
 
