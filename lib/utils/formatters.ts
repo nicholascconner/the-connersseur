@@ -80,5 +80,5 @@ export function getOrderAgeMinutes(dateString: string): number {
  * Check if order is old (> 15 minutes)
  */
 export function isOrderOld(dateString: string): boolean {
-  return getOrderAgeMinutes(dateString) > 15;
+  return getOrderAgeMinutes(dateString) > 30;
 }

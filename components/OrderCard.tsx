@@ -114,7 +114,7 @@ export default function OrderCard({ order, onStatusChange, selected = false, onT
       className={`
         bg-white rounded-2xl p-7 mb-5 shadow-card cursor-pointer
         transition-all duration-300
-        ${isOld && !isCompleted ? 'ring-2 ring-red-400 animate-pulse' : ''}
+        ${isOld && !isCompleted ? 'ring-2 ring-red-400' : ''}
         ${selected ? 'ring-4 ring-blue-500' : ''}
         ${isCompleted ? 'opacity-70' : 'hover:shadow-card-hover hover:scale-[1.02]'}
       `}
