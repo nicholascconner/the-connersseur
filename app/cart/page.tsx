@@ -15,6 +15,7 @@ function CartContent() {
   const [guestName, setGuestName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [groupName, setGroupName] = useState('');
+  const [smsConsent, setSmsConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -45,6 +46,7 @@ function CartContent() {
       const orderRequest: CreateOrderRequest = {
         guest_name: guestName.trim(),
         phone_number: phoneNumber.trim(),
+        sms_consent: smsConsent,
         group_name: groupName.trim() || undefined,
         items: items.map((item) => ({
           menu_item_id: item.menuItemId,
@@ -147,12 +149,21 @@ function CartContent() {
                   required
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-base focus:border-gold focus:outline-none font-semibold"
                 />
-                <p className="text-xs text-gray-400 mt-1 font-semibold">
-                  By providing your phone number, you consent to receive a one-time SMS notification when your order is ready. Msg & data rates may apply. Reply STOP to opt out.{' '}
-                  <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
-                  {' '}|{' '}
-                  <Link href="/terms" className="underline hover:text-gray-600">Terms</Link>
-                </p>
+                <div className="mt-3 flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="sms-consent"
+                    checked={smsConsent}
+                    onChange={(e) => setSmsConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 cursor-pointer accent-burgundy flex-shrink-0"
+                  />
+                  <label htmlFor="sms-consent" className="text-xs text-gray-500 font-semibold cursor-pointer">
+                    I agree to receive text message notifications about my drink order status and updates from The Connerseur. Msg & data rates may apply. Reply STOP to opt out.{' '}
+                    <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
+                    {' '}|{' '}
+                    <Link href="/terms" className="underline hover:text-gray-600">Terms</Link>
+                  </label>
+                </div>
               </div>
 
               <div>

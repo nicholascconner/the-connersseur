@@ -60,6 +60,7 @@ export interface CreateOrderRequest {
   guest_name: string;
   group_name?: string;
   phone_number: string;
+  sms_consent?: boolean;
   items: {
     menu_item_id?: string;
     item_name: string;

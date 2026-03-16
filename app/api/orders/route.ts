@@ -68,7 +68,9 @@ export async function POST(request: NextRequest) {
       guest_name: order.guest_name,
       items: body.items.map((i) => ({ item_name: i.item_name, quantity: i.quantity })),
     });
-    sendGuestOrderConfirmedSMS(order.phone_number, order.order_number);
+    if (body.sms_consent) {
+      sendGuestOrderConfirmedSMS(order.phone_number, order.order_number);
+    }
 
     return NextResponse.json({ order }, { status: 201 });
   } catch (error) {
