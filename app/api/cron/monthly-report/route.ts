@@ -146,18 +146,18 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[]): string 
   const topGuest = stats.topGuests[0];
 
   const punnyTitles: Record<string, string> = {
-    January: 'New Year, New Pour',
-    February: 'Love at First Sip',
-    March: 'March Sadness (No Bracket for This)',
+    January: 'Dry January? We Don\'t Know Her',
+    February: 'Rosé All Day, Every Day',
+    March: 'In Like a Pour, Out Like a Wine',
     April: 'April Pours',
     May: 'May the Best Drink Win',
-    June: 'Juneteenth Cheers',
-    July: 'Red, White & Booze',
-    August: 'The Dog Days of Drinking',
-    September: 'Sip Sip Hooray, Fall is Here',
+    June: 'Summer Sippin\' Has Come So Easy',
+    July: 'Red, White & Brewed',
+    August: 'The Dog Days of Pourin\'',
+    September: 'Fallin\' for These Drinks',
     October: 'Things Are Getting Spirited',
-    November: 'Grateful for the Good Stuff',
-    December: 'The Most Wonderful Time for a Drink',
+    November: 'Pour-giving Season',
+    December: '\'Tis the Season to Be Tipsy',
   };
 
   const title = punnyTitles[stats.month] || `The ${stats.month} Sip Report`;
@@ -186,109 +186,113 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[]): string 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Connersseur — ${stats.month} ${stats.year}</title>
 </head>
-<body style="margin:0;padding:0;background:#0f0515;font-family:Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;background:#1a0a2e;color:#f5f0e8;">
+<body style="margin:0;padding:0;background:#F0EDE8;font-family:Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#FAFAF5;">
 
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#1a0a2e 0%,#3d1060 100%);padding:40px 32px;text-align:center;border-bottom:3px solid #c9a84c;">
-      <p style="margin:0 0 8px;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c9a84c;">The Connersseur</p>
-      <h1 style="margin:0 0 8px;font-family:Georgia,serif;font-size:28px;color:#f5f0e8;">${title}</h1>
-      <p style="margin:0;font-size:14px;color:#c9a84c;">${stats.month} ${stats.year} &nbsp;•&nbsp; Monthly Sip Report</p>
+    <div style="background:linear-gradient(135deg,#2d2d2d 0%,#1a1a1a 100%);padding:36px 32px 28px;text-align:center;">
+      <img src="https://the-connerseur.vercel.app/logo-connerseur.png" alt="The Connersseur" style="max-width:220px;height:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;" />
+      <h1 style="margin:0 0 8px;font-family:Georgia,serif;font-size:26px;color:#FFD700;font-style:italic;">${title}</h1>
+      <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;">${stats.month} ${stats.year} &nbsp;•&nbsp; Monthly Sip Report</p>
     </div>
 
+    <!-- Gold bar -->
+    <div style="height:4px;background:linear-gradient(90deg,#8B1538,#FFD700,#8B1538);"></div>
+
     <!-- Opening -->
-    <div style="padding:32px;border-bottom:1px solid #3d1060;">
-      <p style="margin:0;font-size:16px;line-height:1.7;color:#e8ddd0;">
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;">
+      <p style="margin:0;font-size:16px;line-height:1.8;color:#2d2d2d;">
         ${noOrders
           ? `It was a quiet month at The Connersseur — the glasses were clean, the bar was still, and the ice sat untouched. Consider this the calm before the pour. We'll be back next month with more to report.`
-          : `The bar has spoken, the drinks have been counted, and the verdict is in: ${stats.month} was a <em>vintage</em> month. ${stats.totalDrinksOrdered} drinks poured across ${stats.totalOrders} orders — not bad for a family operation. Pull up a stool and let's break it down.`
+          : `The bar has spoken, the drinks have been counted, and the verdict is in: <strong>${stats.month}</strong> was a <em>vintage</em> month. <strong style="color:#8B1538;">${stats.totalDrinksOrdered} drinks</strong> poured across <strong style="color:#8B1538;">${stats.totalOrders} orders</strong> — not bad for a family operation. Pull up a stool and let's break it down.`
         }
       </p>
     </div>
 
     ${noOrders ? '' : `
     <!-- By the Numbers -->
-    <div style="padding:32px;border-bottom:1px solid #3d1060;">
-      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:20px;color:#c9a84c;text-transform:uppercase;letter-spacing:2px;">By the Numbers</h2>
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;">
+      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:18px;color:#8B1538;text-transform:uppercase;letter-spacing:2px;border-left:4px solid #FFD700;padding-left:12px;">By the Numbers</h2>
       <table style="width:100%;border-collapse:collapse;">
         ${statRows.map((row, i) => `
-        <tr style="background:${i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent'};">
-          <td style="padding:10px 12px;font-size:14px;color:#b8a898;">${row.label}</td>
-          <td style="padding:10px 12px;font-size:14px;font-weight:bold;color:#f5f0e8;text-align:right;">${row.value}</td>
+        <tr style="background:${i % 2 === 0 ? '#F5F5DC' : '#FAFAF5'};">
+          <td style="padding:11px 14px;font-size:14px;color:#555;">${row.label}</td>
+          <td style="padding:11px 14px;font-size:14px;font-weight:bold;color:#8B1538;text-align:right;">${row.value}</td>
         </tr>`).join('')}
       </table>
     </div>
 
     <!-- Top Drinks -->
     ${stats.topDrinks.length > 0 ? `
-    <div style="padding:32px;border-bottom:1px solid #3d1060;">
-      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:20px;color:#c9a84c;text-transform:uppercase;letter-spacing:2px;">The Hit Parade 🏆</h2>
-      <p style="margin:0 0 16px;font-size:14px;color:#b8a898;">This month's most-requested pours:</p>
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;">
+      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:18px;color:#8B1538;text-transform:uppercase;letter-spacing:2px;border-left:4px solid #FFD700;padding-left:12px;">The Hit Parade 🏆</h2>
+      <p style="margin:0 0 16px;font-size:14px;color:#666;">This month's most-requested pours:</p>
       ${stats.topDrinks.map((d, i) => `
-      <div style="display:flex;align-items:center;margin-bottom:10px;padding:10px 14px;background:rgba(201,168,76,${0.08 - i * 0.01});border-left:3px solid ${i === 0 ? '#c9a84c' : '#3d1060'};border-radius:0 4px 4px 0;">
+      <div style="display:flex;align-items:center;margin-bottom:8px;padding:12px 14px;background:${i === 0 ? '#8B1538' : '#F5F5DC'};border-radius:8px;">
         <span style="font-size:18px;margin-right:12px;">${['🥇','🥈','🥉','4️⃣','5️⃣'][i]}</span>
-        <span style="flex:1;font-size:15px;color:#f5f0e8;">${d.name}</span>
-        <span style="font-size:13px;color:#c9a84c;font-weight:bold;">${d.count}x</span>
+        <span style="flex:1;font-size:15px;color:${i === 0 ? '#FFD700' : '#2d2d2d'};font-weight:${i === 0 ? 'bold' : 'normal'};">${d.name}</span>
+        <span style="font-size:13px;color:${i === 0 ? '#FFD700' : '#8B1538'};font-weight:bold;">${d.count}x</span>
       </div>`).join('')}
     </div>` : ''}
 
     <!-- Guest Spotlight -->
     ${topGuest ? `
-    <div style="padding:32px;border-bottom:1px solid #3d1060;background:rgba(139,26,74,0.15);">
-      <h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:20px;color:#c9a84c;text-transform:uppercase;letter-spacing:2px;">Guest Spotlight 🌟</h2>
-      <p style="margin:0 0 12px;font-size:16px;color:#f5f0e8;">
-        This month's MVP of the bar cart: <strong style="color:#c9a84c;">${topGuest.name}</strong>
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;background:#FDF8F0;">
+      <h2 style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#8B1538;text-transform:uppercase;letter-spacing:2px;border-left:4px solid #FFD700;padding-left:12px;">Guest Spotlight 🌟</h2>
+      <p style="margin:0 0 10px;font-size:16px;color:#2d2d2d;">
+        This month's MVP of the bar cart: <strong style="color:#8B1538;">${topGuest.name}</strong>
       </p>
-      <p style="margin:0;font-size:14px;line-height:1.7;color:#b8a898;">
-        With <strong style="color:#f5f0e8;">${topGuest.drinkCount} drinks</strong> across <strong style="color:#f5f0e8;">${topGuest.orderCount} order${topGuest.orderCount !== 1 ? 's' : ''}</strong>, ${topGuest.name} carried the bar on their back this month. Whether they were the life of the party or simply very, very thirsty — we salute them. Hydration is important.
+      <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:#555;">
+        With <strong>${topGuest.drinkCount} drinks</strong> across <strong>${topGuest.orderCount} order${topGuest.orderCount !== 1 ? 's' : ''}</strong>, ${topGuest.name} carried the bar on their back this month. Whether they were the life of the party or simply very, very thirsty — we salute them. Hydration is important.
       </p>
       ${stats.topGuests.length > 1 ? `
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #3d1060;">
-        <p style="margin:0 0 8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8b6a9a;">Also giving it their all:</p>
+      <div style="padding:14px;background:#F5F5DC;border-radius:8px;">
+        <p style="margin:0 0 8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8B1538;font-weight:bold;">Also giving it their all:</p>
         ${stats.topGuests.slice(1).map(g => `
-        <p style="margin:4px 0;font-size:13px;color:#b8a898;">• <strong style="color:#e8ddd0;">${g.name}</strong> — ${g.drinkCount} drink${g.drinkCount !== 1 ? 's' : ''}</p>`).join('')}
+        <p style="margin:4px 0;font-size:13px;color:#555;">• <strong style="color:#2d2d2d;">${g.name}</strong> — ${g.drinkCount} drink${g.drinkCount !== 1 ? 's' : ''}</p>`).join('')}
       </div>` : ''}
     </div>` : ''}
 
     <!-- Bartender's Diaries -->
-    <div style="padding:32px;border-bottom:1px solid #3d1060;">
-      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:20px;color:#c9a84c;text-transform:uppercase;letter-spacing:2px;">The Bartender's Diaries 📓</h2>
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;">
+      <h2 style="margin:0 0 20px;font-family:Georgia,serif;font-size:18px;color:#8B1538;text-transform:uppercase;letter-spacing:2px;border-left:4px solid #FFD700;padding-left:12px;">The Bartender's Diaries 📓</h2>
       ${stats.busiestHour ? `
-      <div style="margin-bottom:16px;padding:14px;background:rgba(255,255,255,0.04);border-radius:6px;">
-        <p style="margin:0;font-size:14px;color:#b8a898;">⏰ <strong style="color:#f5f0e8;">Rush Hour:</strong> The bar hit peak chaos at <strong style="color:#c9a84c;">${formatHour(stats.busiestHour.hour)}</strong> with ${stats.busiestHour.count} orders flying in. The bartender was not amused. The guests were.</p>
+      <div style="margin-bottom:12px;padding:14px;background:#F5F5DC;border-radius:8px;border-left:3px solid #8B1538;">
+        <p style="margin:0;font-size:14px;color:#2d2d2d;">⏰ <strong>Rush Hour:</strong> The bar hit peak chaos at <strong style="color:#8B1538;">${formatHour(stats.busiestHour.hour)}</strong> with ${stats.busiestHour.count} orders flying in. The bartender was not amused. The guests were.</p>
       </div>` : ''}
       ${stats.avgCompletionMinutes !== null ? `
-      <div style="margin-bottom:16px;padding:14px;background:rgba(255,255,255,0.04);border-radius:6px;">
-        <p style="margin:0;font-size:14px;color:#b8a898;">⚡ <strong style="color:#f5f0e8;">Speed of Service:</strong> Average completion time clocked in at <strong style="color:#c9a84c;">${stats.avgCompletionMinutes} minutes</strong>. ${stats.avgCompletionMinutes <= 5 ? "Impressively fast. Our bartender deserves a raise." : stats.avgCompletionMinutes <= 10 ? "A respectable pour time. Craftsmanship takes time." : "Good things come to those who wait. And wait. And wait."}</p>
+      <div style="margin-bottom:12px;padding:14px;background:#F5F5DC;border-radius:8px;border-left:3px solid #8B1538;">
+        <p style="margin:0;font-size:14px;color:#2d2d2d;">⚡ <strong>Speed of Service:</strong> Average completion time clocked in at <strong style="color:#8B1538;">${stats.avgCompletionMinutes} minutes</strong>. ${stats.avgCompletionMinutes <= 5 ? "Impressively fast. Our bartender deserves a raise." : stats.avgCompletionMinutes <= 10 ? "A respectable pour time. Craftsmanship takes time." : "Good things come to those who wait. And wait. And wait."}</p>
       </div>` : ''}
       ${stats.longestOrder ? `
-      <div style="margin-bottom:16px;padding:14px;background:rgba(255,255,255,0.04);border-radius:6px;">
-        <p style="margin:0;font-size:14px;color:#b8a898;">🐢 <strong style="color:#f5f0e8;">The Long Pour Award:</strong> ${stats.longestOrder.guestName}'s order took a heroic <strong style="color:#c9a84c;">${stats.longestOrder.minutes} minutes</strong> to complete${stats.longestOrder.drinks.length > 0 ? ` (${stats.longestOrder.drinks.join(', ')})` : ''}. Worth the wait, we're sure.</p>
+      <div style="margin-bottom:12px;padding:14px;background:#F5F5DC;border-radius:8px;border-left:3px solid #8B1538;">
+        <p style="margin:0;font-size:14px;color:#2d2d2d;">🐢 <strong>The Long Pour Award:</strong> ${stats.longestOrder.guestName}'s order took a heroic <strong style="color:#8B1538;">${stats.longestOrder.minutes} minutes</strong> to complete${stats.longestOrder.drinks.length > 0 ? ` (${stats.longestOrder.drinks.join(', ')})` : ''}. Worth the wait, we're sure.</p>
       </div>` : ''}
       ${stats.customDrinkCount > 0 ? `
-      <div style="padding:14px;background:rgba(255,255,255,0.04);border-radius:6px;">
-        <p style="margin:0;font-size:14px;color:#b8a898;">🎨 <strong style="color:#f5f0e8;">Creative License:</strong> <strong style="color:#c9a84c;">${stats.customDrinkCount} custom creation${stats.customDrinkCount !== 1 ? 's' : ''}</strong> were ordered this month. Someone came in with a vision. We respect that.</p>
+      <div style="padding:14px;background:#F5F5DC;border-radius:8px;border-left:3px solid #8B1538;">
+        <p style="margin:0;font-size:14px;color:#2d2d2d;">🎨 <strong>Creative License:</strong> <strong style="color:#8B1538;">${stats.customDrinkCount} custom creation${stats.customDrinkCount !== 1 ? 's' : ''}</strong> were ordered this month. Someone came in with a vision. We respect that.</p>
       </div>` : ''}
     </div>
 
     <!-- Drink of the Month -->
-    <div style="padding:32px;border-bottom:1px solid #3d1060;background:rgba(201,168,76,0.06);">
-      <h2 style="margin:0 0 6px;font-family:Georgia,serif;font-size:20px;color:#c9a84c;text-transform:uppercase;letter-spacing:2px;">Drink of the Month ✨</h2>
-      <p style="margin:0 0 20px;font-size:12px;color:#8b6a9a;letter-spacing:1px;text-transform:uppercase;">The Connersseur Recommends</p>
-      <h3 style="margin:0 0 12px;font-family:Georgia,serif;font-size:22px;color:#f5f0e8;">${drink.name}</h3>
-      <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#b8a898;">${drink.description}</p>
-      <div style="padding:16px;background:rgba(0,0,0,0.3);border-radius:6px;border-left:3px solid #c9a84c;">
-        <p style="margin:0 0 6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;">The Recipe</p>
-        <p style="margin:0;font-size:14px;line-height:1.7;color:#e8ddd0;">${drink.recipe}</p>
+    <div style="padding:32px;border-bottom:2px solid #F0EDE8;background:#8B1538;">
+      <h2 style="margin:0 0 4px;font-family:Georgia,serif;font-size:18px;color:#FFD700;text-transform:uppercase;letter-spacing:2px;">Drink of the Month ✨</h2>
+      <p style="margin:0 0 20px;font-size:12px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;">The Connersseur Recommends</p>
+      <h3 style="margin:0 0 12px;font-family:Georgia,serif;font-size:22px;color:#FFFFFF;">${drink.name}</h3>
+      <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);">${drink.description}</p>
+      <div style="padding:16px;background:rgba(0,0,0,0.25);border-radius:8px;border-left:3px solid #FFD700;">
+        <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FFD700;font-weight:bold;">The Recipe</p>
+        <p style="margin:0;font-size:14px;line-height:1.8;color:#F5F5DC;">${drink.recipe}</p>
       </div>
     </div>
     `}
 
     <!-- Footer -->
-    <div style="padding:32px;text-align:center;background:#0f0515;">
-      <p style="margin:0 0 8px;font-family:Georgia,serif;font-size:16px;color:#c9a84c;">Until next month — may your glass be full</p>
-      <p style="margin:0 0 20px;font-size:13px;color:#6b5a7a;">and your orders never cancelled.</p>
-      <p style="margin:0;font-size:11px;color:#4a3a5a;letter-spacing:2px;text-transform:uppercase;">The Connersseur &nbsp;•&nbsp; ${stats.month} ${stats.year}</p>
+    <div style="height:4px;background:linear-gradient(90deg,#8B1538,#FFD700,#8B1538);"></div>
+    <div style="padding:28px 32px;text-align:center;background:#2d2d2d;">
+      <p style="margin:0 0 6px;font-family:Georgia,serif;font-size:15px;color:#FFD700;font-style:italic;">Until next month — may your glass be full</p>
+      <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,0.5);">and your orders never cancelled.</p>
+      <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;">The Connersseur &nbsp;•&nbsp; ${stats.month} ${stats.year}</p>
     </div>
 
   </div>
