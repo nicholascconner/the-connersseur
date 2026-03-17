@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npx next build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd bartender drink library management page\n\nBartender can now toggle drinks on/off from a pre-populated library\nof ~70 drinks across 5 categories \\(Cocktails, Wine, Beer, Spirits,\nNon-Alcoholic\\). Includes per-drink toggles, category-level enable/disable\nall, search, and collapsible sections.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(npx next dev:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_close",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nReplace CSS logo with custom hand-drawn logo image\n\nUse the new logo PNG with animated glow dots overlaid at\npixel-accurate positions to create the marquee light effect.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nRemove animated marquee dots, keep static logo only\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(Vermouth: Spray\"\\)\n- Disable Add to Cart until all dropdowns are selected\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(ls:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(npx supabase link:*)",
+      "Bash(curl:*)",
+      "Bash(SB_URL=\"https://lsyposimkjghcnfkrsap.supabase.co\")",
+      "Bash(SB_KEY=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzeXBvc2lta2pnaGNuZmtyc2FwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTQ1OTI1OCwiZXhwIjoyMDg1MDM1MjU4fQ.o50ctI2sIV472h4K4ffE0IGeMLr6jRIv_dio5PuZyG8\")",
+      "Bash(__NEW_LINE_e3e5ec17d4d9fdc8__ curl -s -o /dev/null -w \"Insert: %{http_code}\\\\n\" -X POST \"$SB_URL/rest/v1/menu_items\" -H \"apikey: $SB_KEY\" -H \"Authorization: Bearer $SB_KEY\" -H \"Content-Type: application/json\" -H \"Prefer: return=minimal,resolution=ignore-duplicates\" -d '[\n    {\"\"name\"\":\"\"French Martini\"\",\"\"description\"\":\"\"Pineapple foam meets bright lush strawberry. A refreshing concoction.\"\",\"\"ingredients\"\":\"\"Vodka, Chambord, Pineapple Juice\"\",\"\"category\"\":\"\"Cocktails\"\",\"\"is_active\"\":false,\"\"sort_order\"\":127},\n    {\"\"name\"\":\"\"Lemon Drop\"\",\"\"description\"\":\"\"Easy drinking, bright and zesty. Crisp and clean.\"\",\"\"ingredients\"\":\"\"Vodka, Lemon Juice, Simple Syrup, Cointreau, Lemon Wedge\"\",\"\"category\"\":\"\"Cocktails\"\",\"\"is_active\"\":false,\"\"sort_order\"\":128},\n    {\"\"name\"\":\"\"Spicy Marg\"\",\"\"description\"\":\"\"Smoky heat meets bright citrus. A mezcal margarita with a kick.\"\",\"\"ingredients\"\":\"\"Mezcal, Cointreau, Lime Juice, Agave Nectar, Jalapeno, Tajin Rim\"\",\"\"category\"\":\"\"Cocktails\"\",\"\"is_active\"\":false,\"\"sort_order\"\":129},\n    {\"\"name\"\":\"\"Pimms Cup\"\",\"\"description\"\":\"\"A toast to the Brits. The quintessential summer garden drink.\"\",\"\"ingredients\"\":\"\"Pimms, Lemon Lime Soda, Cucumber, Lemon Wheel\"\",\"\"category\"\":\"\"Cocktails\"\",\"\"is_active\"\":false,\"\"sort_order\"\":130}\n  ]')",
+      "Skill(commit-commands:commit-push-pr)",
+      "Skill(commit-commands:commit-push-pr:*)",
+      "Bash(supabase --version)",
+      "Bash(npx supabase:*)",
+      "Bash(find 'c:\\\\Users\\\\NickConner\\\\OneDrive\\\\01. Personal\\\\12. Claude Coding\\\\EC Wine\\\\the-connersseur' -type f -path */src/app/api/*)",
+      "Bash(find 'c:\\\\Users\\\\NickConner\\\\OneDrive\\\\01. Personal\\\\12. Claude Coding\\\\EC Wine\\\\the-connersseur' -type f \\\\\\(-name *.ts -o -name *.js -o -name *.tsx \\\\\\))",
+      "Bash(xargs grep:*)",
+      "Bash(find 'c:\\\\Users\\\\NickConner\\\\OneDrive\\\\01. Personal\\\\12. Claude Coding\\\\EC Wine\\\\the-connersseur' -maxdepth 2 -type d ! -path */node_modules* ! -path */.next* ! -path */.git* ! -path */.playwright* ! -path */.claude*)",
+      "Bash(npm uninstall:*)"
+    ]
+  }
+}

@@ -1,16 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
-import nodemailer from 'nodemailer';
 import { OrderWithItems, Order, OrderItem, MenuItem } from '@/types';
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.brevo.com',
-  port: 587,
-  auth: {
-    user: 'a53915001@smtp-brevo.com',
-    pass: process.env.BREVO_SMTP_PASSWORD,
-  },
-});
+async function sendEmail(to: string[], subject: string, html: string) {
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': process.env.BREVO_API_KEY!,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sender: { name: 'The Connersseur', email: 'a53915001@smtp-brevo.com' },
+      to: to.map((email) => ({ email })),
+      subject,
+      htmlContent: html,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Brevo API error: ${error}`);
+  }
+}
 
 const RECIPIENTS = ['Nicholasc.conner@gmail.com', 'econnertx@outlook.com'];
 
@@ -349,12 +360,7 @@ export async function GET(request: NextRequest) {
     const html = generateNewsletter(stats, (menuItems as MenuItem[]) || []);
 
     const monthLabel = `${stats.month} ${stats.year}`;
-    await transporter.sendMail({
-      from: '"The Connersseur" <Nicholasc.conner@gmail.com>',
-      to: recipients.join(', '),
-      subject: `🍷 The Connersseur — ${monthLabel} Sip Report`,
-      html,
-    });
+    await sendEmail(recipients, `🍷 The Connersseur — ${monthLabel} Sip Report`, html);
 
     return NextResponse.json({ success: true, month: monthLabel, totalOrders: stats.totalOrders });
   } catch (error) {
