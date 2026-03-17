@@ -30,8 +30,8 @@ function CartContent() {
       return;
     }
 
-    if (!phoneNumber.trim() || phoneNumber.replace(/\D/g, '').length < 10) {
-      setError('Please enter a valid phone number');
+    if (smsConsent && phoneNumber.replace(/\D/g, '').length < 10) {
+      setError('Please enter a valid phone number to receive text updates');
       return;
     }
 
@@ -45,7 +45,7 @@ function CartContent() {
     try {
       const orderRequest: CreateOrderRequest = {
         guest_name: guestName.trim(),
-        phone_number: phoneNumber.trim(),
+        phone_number: smsConsent ? phoneNumber.trim() : undefined,
         sms_consent: smsConsent,
         group_name: groupName.trim() || undefined,
         items: items.map((item) => ({
@@ -138,7 +138,7 @@ function CartContent() {
 
               <div className="mb-6">
                 <label htmlFor="phone-number" className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
-                  Phone Number <span className="text-red-500">*</span>
+                  Phone Number <span className="text-gray-400 font-normal normal-case">(optional — required for text updates)</span>
                 </label>
                 <input
                   type="tel"
@@ -146,7 +146,6 @@ function CartContent() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="(469) 555-1234"
-                  required
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-4 text-base focus:border-gold focus:outline-none font-semibold"
                 />
                 <div className="mt-3 flex items-start gap-3">

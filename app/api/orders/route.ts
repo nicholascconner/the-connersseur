@@ -8,20 +8,22 @@ export async function POST(request: NextRequest) {
     const body: CreateOrderRequest = await request.json();
 
     // Validate request
-    if (!body.guest_name || !body.phone_number || !body.items || body.items.length === 0) {
+    if (!body.guest_name || !body.items || body.items.length === 0) {
       return NextResponse.json(
-        { error: 'Guest name, phone number, and items are required' },
+        { error: 'Guest name and items are required' },
         { status: 400 }
       );
     }
 
-    // Validate phone number (at least 10 digits)
-    const phoneDigits = body.phone_number.replace(/\D/g, '');
-    if (phoneDigits.length < 10) {
-      return NextResponse.json(
-        { error: 'Please enter a valid phone number' },
-        { status: 400 }
-      );
+    // Validate phone number only if SMS consent was given
+    if (body.sms_consent) {
+      const phoneDigits = (body.phone_number || '').replace(/\D/g, '');
+      if (phoneDigits.length < 10) {
+        return NextResponse.json(
+          { error: 'Please enter a valid phone number to receive text updates' },
+          { status: 400 }
+        );
+      }
     }
 
     // Create order
@@ -30,7 +32,7 @@ export async function POST(request: NextRequest) {
       .insert({
         guest_name: body.guest_name.trim(),
         group_name: body.group_name?.trim() || null,
-        phone_number: body.phone_number.trim(),
+        phone_number: body.sms_consent ? body.phone_number?.trim() || null : null,
         status: 'new',
       })
       .select()
