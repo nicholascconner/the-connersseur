@@ -286,15 +286,31 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[]): string 
 }
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const isTest = request.nextUrl.searchParams.get('test') === 'true';
+  const bartenderKey = request.nextUrl.searchParams.get('key');
+
+  if (isTest) {
+    if (bartenderKey !== process.env.BARTENDER_DASH_KEY) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+  } else {
+    const authHeader = request.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   }
+
+  const recipients = isTest ? ['Nicholasc.conner@gmail.com'] : RECIPIENTS;
 
   try {
     const now = new Date();
-    const firstOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const firstOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    // In test mode use current month, otherwise last month
+    const firstOfLastMonth = isTest
+      ? new Date(now.getFullYear(), now.getMonth(), 1)
+      : new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const firstOfThisMonth = isTest
+      ? new Date(now.getFullYear(), now.getMonth() + 1, 1)
+      : new Date(now.getFullYear(), now.getMonth(), 1);
 
     const { data: ordersData, error: ordersError } = await supabaseAdmin
       .from('orders')
@@ -335,7 +351,7 @@ export async function GET(request: NextRequest) {
     const monthLabel = `${stats.month} ${stats.year}`;
     await transporter.sendMail({
       from: '"The Connersseur" <Nicholasc.conner@gmail.com>',
-      to: RECIPIENTS.join(', '),
+      to: recipients.join(', '),
       subject: `🍷 The Connersseur — ${monthLabel} Sip Report`,
       html,
     });
