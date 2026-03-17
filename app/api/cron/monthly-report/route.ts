@@ -10,7 +10,7 @@ async function sendEmail(to: string[], subject: string, html: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      sender: { name: 'The Connersseur', email: 'a53915001@smtp-brevo.com' },
+      sender: { name: 'The Connersseur', email: 'nicholasc.conner@gmail.com' },
       to: to.map((email) => ({ email })),
       subject,
       htmlContent: html,
