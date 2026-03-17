@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   host: 'smtp-relay.brevo.com',
   port: 587,
   auth: {
-    user: 'Nicholasc.conner@gmail.com',
+    user: 'a53915001@smtp-brevo.com',
     pass: process.env.BREVO_SMTP_PASSWORD,
   },
 });
