@@ -35,20 +35,43 @@ export function sendBartenderNewOrderSMS(order: {
   sendSMS(formatPhone(bartenderPhone), body);
 }
 
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 // --- GUEST NOTIFICATIONS ---
 export function sendGuestOrderConfirmedSMS(phone: string, orderNumber: number) {
-  const body = `Your order #${orderNumber} is in! We're not wine-ing about it — your drinks are queued up and the bartender has been notified. Sit tight! 🍷`;
-  sendSMS(formatPhone(phone), body);
+  const n = orderNumber;
+  const messages = [
+    `Your order #${n} is in! We're not wine-ing about it — your drinks are queued up and the bartender has been notified. Sit tight! 🍷`,
+    `You've just placed a very Connerseur-level order. Order #${n}. Your sips are lining up! Stay tuned for deliciousness.`,
+    `Order #${n} is being uncorked in our system, and getting the VIP treatment at the bar while we queue up the perfect pour. Great taste never goes unnoticed here.`,
+    `Your inner Connerseur just made an excellent call with Order #${n}. Your order has been received, the bartender's on alert, and your next round of joy is now officially upcoming.`,
+  ];
+  sendSMS(formatPhone(phone), pick(messages));
 }
 
 export function sendGuestOrderInProgressSMS(phone: string, orderNumber: number) {
-  const body = `Shaken, not forgotten! Order #${orderNumber} is being crafted right now. Your bartender is pouring their heart (and spirits) into it. 🧊`;
-  sendSMS(formatPhone(phone), body);
+  const n = orderNumber;
+  const messages = [
+    `Shaken, not forgotten! Order #${n} is being crafted right now. Your bartender is pouring their heart (and spirits) into it. 🧊`,
+    `Connerseur magic in progress. Order #${n} is swirling behind the bar right now while your bartender fine-tunes every last drop.`,
+    `Your inner Connerseur has been heard. Order #${n} is in the shaker and our bartender is crafting it with top-shelf care.`,
+    `From click to clink, we're on it. Order #${n} is being mixed behind the bar—custom-built for your excellent taste.`,
+  ];
+  sendSMS(formatPhone(phone), pick(messages));
 }
 
 export function sendGuestOrderCompletedSMS(phone: string, orderNumber: number) {
-  const body = `It's the moment you've been waiting pour! Order #${orderNumber} is ready for pickup. Come and get it before the ice gets lonely! 🥂`;
-  sendSMS(formatPhone(phone), body);
+  const n = orderNumber;
+  const messages = [
+    `It's the moment you've been waiting pour! Order #${n} is ready for pickup. Come and get it before the ice gets lonely! 🥂`,
+    `Your Connerseur moment has arrived. Order #${n} is ready for pickup—come claim your sips before the ice starts practicing a backstroke.`,
+    `From our bar to your hands, just like a true Connerseur. Order #${n} is poured, ready, and waiting—swing by and make it official.`,
+    `Your next round of joy is ready. Order #${n} is chilled, crafted, and ready for pickup—come rescue your drink before the bartender drinks it himself.`,
+    `Your Connerseur creation is ready and waiting. Come grab Order #${n} before the ice melts and the bartender starts questioning whether to welcome you back.`,
+  ];
+  sendSMS(formatPhone(phone), pick(messages));
 }
 
 // --- LOW-LEVEL SEND ---
