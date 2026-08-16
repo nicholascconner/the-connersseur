@@ -12,6 +12,7 @@ function MenuContent() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCustomModal, setShowCustomModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { addToCart, itemCount } = useCart();
 
   useEffect(() => {
@@ -55,8 +56,19 @@ function MenuContent() {
     addToCart(cartItem);
   };
 
+  // Filter by search query (name, category, or ingredients/liquor type)
+  const query = searchQuery.trim().toLowerCase();
+  const filteredItems = query
+    ? menuItems.filter((item) =>
+        item.name.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query) ||
+        item.ingredients.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
+      )
+    : menuItems;
+
   // Group items by category
-  const categorizedItems = menuItems.reduce((acc, item) => {
+  const categorizedItems = filteredItems.reduce((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
     }
@@ -99,10 +111,48 @@ function MenuContent() {
         </Link>
       </div>
 
+      {/* Search Bar */}
+      <div className="max-w-4xl mx-auto px-6 mb-8">
+        <div className="relative">
+          <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl pointer-events-none">🔍</span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by drink name or liquor (e.g. tequila, martini)..."
+            className="search-input"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-burgundy font-bold text-lg"
+              aria-label="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="max-w-4xl mx-auto px-6">
         {loading ? (
           <div className="text-center py-12">
             <div className="text-burgundy text-lg font-bold">Loading menu...</div>
+          </div>
+        ) : query && Object.keys(categorizedItems).length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-gray-500 text-lg font-semibold">
+              No drinks match &ldquo;{searchQuery}&rdquo;.
+            </div>
+            <p className="text-gray-400 text-sm mt-2 mb-6">
+              Try a different name or liquor type, or request a custom order instead.
+            </p>
+            <button
+              onClick={() => setShowCustomModal(true)}
+              className="btn-pill-burgundy"
+            >
+              Request a Custom Order
+            </button>
           </div>
         ) : (
           <>
