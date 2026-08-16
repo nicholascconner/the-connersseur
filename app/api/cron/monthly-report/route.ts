@@ -25,6 +25,15 @@ async function sendEmail(to: string[], subject: string, html: string) {
 
 const RECIPIENTS = ['Nicholasc.conner@gmail.com', 'econnertx@outlook.com'];
 
+// Shown as a banner near the top of the newsletter when non-empty. Clear this out once
+// the announcement has gone stale (e.g. after a month or two).
+const FEATURE_ALERTS: { title: string; body: string }[] = [
+  {
+    title: 'Search the Menu',
+    body: 'The guest ordering page now has a search bar right up top. Know you want a martini, or just know you are in the mood for tequila? Type it in. It matches drink names, liquor type, and category in real time, so you can jump straight to what you want instead of scrolling the whole list.',
+  },
+];
+
 interface MonthlyStats {
   month: string;
   year: string;
@@ -152,205 +161,162 @@ function formatHour(hour: number): string {
 }
 
 interface RecipeTwist {
-  twistName: string;
+  drinkName: string;
   build: string[];
   method: string;
   garnish: string;
   glass: string;
 }
 
-// Hand-built twists for the drinks most likely to top the list. Falls back to a
-// generated build for anything not in this library (see genericTwist below).
-const RECIPE_TWISTS: Record<string, RecipeTwist> = {
-  'old fashioned': {
-    twistName: 'The Upper West Old Fashioned',
-    build: ['2 oz Bourbon or Rye', '0.25 oz Amaro', '1 barspoon Antica Formula sweet vermouth', '2 dashes Angostura Bitters', '1 sugar cube or 0.25 oz simple syrup'],
-    method: 'Stir all ingredients with ice for 30 seconds. Strain over one large rock.',
-    garnish: 'Orange peel, expressed over the glass and dropped in.',
-    glass: 'Rocks glass',
-  },
-  manhattan: {
-    twistName: 'The Smoked Manhattan',
-    build: ['2 oz Rye Whiskey', '1 oz Sweet Vermouth', '2 dashes Angostura Bitters', '1 dash Orange Bitters'],
-    method: 'Stir with ice until well chilled, about 30 seconds. Strain into a chilled coupe.',
-    garnish: 'Flamed orange peel, Luxardo cherry.',
-    glass: 'Coupe',
-  },
-  martini: {
-    twistName: 'The Bone-Dry Twist Martini',
-    build: ['2.5 oz Gin or Vodka', '0.25 oz Dry Vermouth', '1 dash Orange Bitters'],
-    method: 'Stir, never shake, with ice for 30 seconds. Strain into a chilled martini glass.',
-    garnish: 'Three olives, or a lemon twist.',
-    glass: 'Martini glass',
-  },
-  'amaretto sour': {
-    twistName: 'The Smoky Amaretto Sour',
-    build: ['1.5 oz Amaretto', '0.5 oz Bourbon', '0.75 oz Fresh Lemon Juice', '0.5 oz Simple Syrup', '1 Egg White'],
-    method: 'Dry shake without ice for 15 seconds, then add ice and shake again for 15 seconds. Double strain into a rocks glass over one large cube.',
-    garnish: '3 drops Angostura bitters on the foam, orange peel.',
-    glass: 'Rocks glass',
-  },
-  margarita: {
-    twistName: 'The Chili-Salt Margarita',
-    build: ['2 oz Tequila', '1 oz Cointreau', '1 oz Fresh Lime Juice', '0.25 oz Agave Nectar'],
-    method: 'Shake hard with ice for 10 to 12 seconds. Strain over fresh ice.',
-    garnish: 'Tajin and chili-salt rim, lime wheel.',
-    glass: 'Rocks glass',
-  },
-  'moscow mule': {
-    twistName: 'The Ginger-Forward Mule',
-    build: ['2 oz Vodka', '0.5 oz Fresh Lime Juice', '4 to 5 oz Ginger Beer', '2 slices fresh ginger, muddled'],
-    method: 'Muddle the ginger in a copper mug, add vodka and lime, fill with ice, top with ginger beer, stir once.',
-    garnish: 'Candied ginger, lime wheel.',
-    glass: 'Copper mug',
-  },
-  'whiskey sour': {
-    twistName: 'The Frothy Whiskey Sour',
-    build: ['2 oz Bourbon', '0.75 oz Fresh Lemon Juice', '0.75 oz Simple Syrup', '1 Egg White'],
-    method: 'Dry shake, then shake again with ice. Strain into a rocks glass over one large cube.',
-    garnish: '3 dashes Angostura bitters drawn through the foam, brandied cherry.',
-    glass: 'Rocks glass',
-  },
-  negroni: {
-    twistName: 'The Barrel-Rested Negroni',
-    build: ['1 oz Gin', '1 oz Campari', '1 oz Sweet Vermouth'],
-    method: 'Stir with ice for 20 seconds. Strain over one large rock.',
-    garnish: 'Orange peel.',
-    glass: 'Rocks glass',
-  },
-  cosmopolitan: {
-    twistName: 'The Blood Orange Cosmo',
-    build: ['1.5 oz Vodka', '0.5 oz Cointreau', '0.5 oz Fresh Lime Juice', '0.5 oz Cranberry Juice, swap in blood orange juice for the twist'],
-    method: 'Shake hard with ice for 10 seconds. Double strain into a chilled coupe.',
-    garnish: 'Flamed orange peel.',
-    glass: 'Coupe',
-  },
-  'espresso martini': {
-    twistName: 'The Vanilla Bean Espresso Martini',
-    build: ['1.5 oz Vodka', '0.5 oz Coffee Liqueur', '1 oz fresh espresso, pulled hot', '0.25 oz vanilla bean simple syrup'],
-    method: 'Shake hard with ice for 12 to 15 seconds to build the foam. Double strain into a chilled coupe.',
-    garnish: '3 coffee beans.',
-    glass: 'Coupe',
-  },
-  mojito: {
-    twistName: 'The Berry Mojito',
-    build: ['2 oz White Rum', '0.75 oz Fresh Lime Juice', '2 tsp Sugar', '8 to 10 fresh mint leaves', 'Soda Water to top'],
-    method: 'Gently muddle mint and sugar in the glass. Add rum and lime, fill with crushed ice, top with soda, stir.',
-    garnish: 'Mint sprig, fresh berries.',
-    glass: 'Highball',
-  },
-  paloma: {
-    twistName: 'The Grapefruit Paloma',
-    build: ['2 oz Tequila', '0.5 oz Fresh Lime Juice', 'Grapefruit Soda to top', 'Pinch of salt'],
-    method: 'Build over ice in a salt-rimmed glass, squeeze the lime, top with grapefruit soda, stir once.',
-    garnish: 'Grapefruit wedge.',
-    glass: 'Highball',
-  },
-  sazerac: {
-    twistName: 'The Absinthe-Rinsed Sazerac',
-    build: ['2 oz Rye Whiskey', '1 sugar cube', '3 dashes Peychaud’s Bitters', 'Absinthe rinse'],
-    method: 'Rinse a chilled rocks glass with absinthe and discard the excess. Stir the rye, sugar, and bitters with ice separately, then strain into the prepared glass.',
-    garnish: 'Lemon peel, expressed and discarded.',
-    glass: 'Rocks glass, no ice',
-  },
-  'the godfather': {
-    twistName: 'The Godfather, Reimagined',
-    build: ['2 oz Blended Scotch or Single Malt', '0.5 oz Amaretto'],
-    method: 'Build over one large ice cube, stir once to combine.',
-    garnish: 'None needed. Keep it simple.',
-    glass: 'Rocks glass',
-  },
-  'upper west side': {
-    twistName: 'The Upper West Side, Perfected',
-    build: ['1.5 oz Whiskey', '1 oz Rye', '0.25 oz Amaro', '0.25 oz Antica Formula', '2 dashes Angostura Bitters'],
-    method: 'Stir with ice for 30 seconds. Strain over one large rock.',
-    garnish: 'Orange peel.',
-    glass: 'Rocks glass',
-  },
-  'french martini': {
-    twistName: 'The French Martini, Extra Foam',
-    build: ['1.5 oz Vodka', '0.5 oz Chambord', '2 oz Pineapple Juice'],
-    method: 'Shake hard with ice for 12 seconds to build the pineapple foam. Strain into a chilled coupe.',
-    garnish: '3 raspberries on a pick.',
-    glass: 'Coupe',
-  },
-  boulevardier: {
-    twistName: 'The Smoked Boulevardier',
-    build: ['1.5 oz Bourbon', '1 oz Campari', '1 oz Sweet Vermouth'],
-    method: 'Stir with ice, strain over one large rock.',
-    garnish: 'Orange peel.',
-    glass: 'Rocks glass',
-  },
-  'vesper martini': {
-    twistName: 'The Original Vesper',
-    build: ['3 oz Gin', '1 oz Vodka', '0.5 oz Lillet Blanc'],
-    method: 'Shake hard with ice for 10 seconds. Strain into a chilled martini glass.',
-    garnish: 'Lemon twist.',
-    glass: 'Martini glass',
-  },
-  'gin and tonic': {
-    twistName: 'The Peppered G&T',
-    build: ['2 oz Premium Gin', '4 oz Tonic Water', 'Fresh lime squeeze'],
-    method: 'Build over ice, gin first, top with tonic, squeeze and drop the lime.',
-    garnish: 'Lime wedge, cracked black pepper.',
-    glass: 'Highball',
-  },
-  'tom collins': {
-    twistName: 'The Elderflower Collins',
-    build: ['2 oz Gin', '0.75 oz Fresh Lemon Juice', '0.5 oz Simple Syrup', 'Soda Water to top'],
-    method: 'Shake gin, lemon, and syrup with ice. Strain into a highball over fresh ice, top with soda.',
-    garnish: 'Lemon slice, cherry.',
-    glass: 'Highball',
-  },
-};
+type SpiritFamily = 'whiskey' | 'gin' | 'vodka' | 'tequila' | 'rum' | 'other';
 
-function genericTwist(item: MenuItem): RecipeTwist {
-  const parts = item.ingredients.split(',').map((s) => s.trim()).filter(Boolean);
-  const base = parts[0] || 'the base spirit';
-  return {
-    twistName: `The ${item.name} Twist`,
-    build: [`2 oz ${base}`, ...parts.slice(1).map((p) => `0.5 oz ${p}`)],
-    method: 'Combine with ice, stir if it is spirit-forward or shake if it has juice or egg white, then strain.',
-    garnish: 'A citrus peel to match.',
-    glass: 'Whatever glass suits the occasion',
-  };
+function classifyFamily(ingredients: string): SpiritFamily | null {
+  const s = ingredients.toLowerCase();
+  if (/bourbon|\brye\b|whiskey|whisky|scotch/.test(s)) return 'whiskey';
+  if (/\bgin\b/.test(s)) return 'gin';
+  if (/vodka/.test(s)) return 'vodka';
+  if (/tequila|mezcal/.test(s)) return 'tequila';
+  if (/\brum\b/.test(s)) return 'rum';
+  return null;
 }
 
-function suggestDrinkOfMonth(topDrinks: { name: string; count: number }[], menuItems: MenuItem[], isAllTime = false): { name: string; description: string; twist: RecipeTwist } {
-  let sourceItem: MenuItem | undefined;
+// Recommendations for drinks that are NOT currently in menu_items, grouped by the
+// spirit family they belong to. Picked to be genuinely new additions, not twists on
+// something already on the menu. Each family has a couple of options in case the
+// first pick ever ends up getting added to the real menu.
+const OFF_MENU_LIBRARY: Record<SpiritFamily, RecipeTwist[]> = {
+  whiskey: [
+    {
+      drinkName: 'New York Sour',
+      build: ['2 oz Bourbon', '0.75 oz Fresh Lemon Juice', '0.75 oz Simple Syrup', '0.5 oz Dry Red Wine, floated on top'],
+      method: 'Shake the bourbon, lemon, and syrup hard with ice for 10 seconds. Strain into a rocks glass over one large cube. Slowly pour the red wine over the back of a spoon so it sits on top.',
+      garnish: 'Lemon twist. Let the wine float be the show.',
+      glass: 'Rocks glass',
+    },
+    {
+      drinkName: 'Kentucky Mule',
+      build: ['2 oz Bourbon', '0.5 oz Fresh Lime Juice', '4 oz Ginger Beer'],
+      method: 'Build over ice in a copper mug, bourbon and lime first, top with ginger beer, stir once.',
+      garnish: 'Lime wheel, candied ginger.',
+      glass: 'Copper mug',
+    },
+  ],
+  gin: [
+    {
+      drinkName: 'Clover Club',
+      build: ['2 oz Gin', '0.75 oz Fresh Lemon Juice', '0.5 oz Raspberry Syrup', '1 Egg White'],
+      method: 'Dry shake without ice for 15 seconds, then add ice and shake hard for 15 more. Double strain into a chilled coupe.',
+      garnish: 'Three fresh raspberries on a pick.',
+      glass: 'Coupe',
+    },
+    {
+      drinkName: 'Southside',
+      build: ['2 oz Gin', '0.75 oz Fresh Lime Juice', '0.75 oz Simple Syrup', '6 to 8 fresh mint leaves'],
+      method: 'Shake hard with ice for 10 seconds. Double strain into a chilled coupe.',
+      garnish: 'Mint sprig.',
+      glass: 'Coupe',
+    },
+  ],
+  vodka: [
+    {
+      drinkName: 'Bloody Mary',
+      build: ['2 oz Vodka', '4 oz Tomato Juice', '0.5 oz Fresh Lemon Juice', '2 dashes Worcestershire Sauce', '2 dashes Hot Sauce', 'Pinch of Celery Salt and Black Pepper'],
+      method: 'Combine in a shaker with ice, roll gently to mix without over-diluting. Strain into a highball over fresh ice.',
+      garnish: 'Celery stalk, lemon wedge, olives.',
+      glass: 'Highball',
+    },
+    {
+      drinkName: 'Sea Breeze',
+      build: ['1.5 oz Vodka', '3 oz Cranberry Juice', '1 oz Fresh Grapefruit Juice'],
+      method: 'Build over ice in a highball, stir once.',
+      garnish: 'Lime wedge.',
+      glass: 'Highball',
+    },
+  ],
+  tequila: [
+    {
+      drinkName: 'Ranch Water',
+      build: ['2 oz Tequila', '0.5 oz Fresh Lime Juice', 'Topo Chico or other sparkling mineral water to top'],
+      method: 'Build over ice, tequila and lime first, top with sparkling water, stir once.',
+      garnish: 'Lime wedge.',
+      glass: 'Highball',
+    },
+    {
+      drinkName: 'El Diablo',
+      build: ['1.5 oz Tequila', '0.5 oz Creme de Cassis', '0.5 oz Fresh Lime Juice', '3 oz Ginger Beer'],
+      method: 'Build over ice in a highball, stir once.',
+      garnish: 'Lime wheel.',
+      glass: 'Highball',
+    },
+  ],
+  rum: [
+    {
+      drinkName: 'Painkiller',
+      build: ['2 oz Dark Rum', '4 oz Pineapple Juice', '1 oz Cream of Coconut', '0.5 oz Fresh Orange Juice'],
+      method: 'Shake hard with ice for 10 seconds. Strain over crushed ice.',
+      garnish: 'Fresh grated nutmeg, pineapple wedge.',
+      glass: 'Rocks glass',
+    },
+    {
+      drinkName: 'Hurricane',
+      build: ['1 oz Light Rum', '1 oz Dark Rum', '1 oz Fresh Orange Juice', '1 oz Fresh Lime Juice', '0.5 oz Grenadine', '0.5 oz Passion Fruit Syrup'],
+      method: 'Shake hard with ice for 10 seconds. Strain over fresh ice.',
+      garnish: 'Orange slice, cherry.',
+      glass: 'Hurricane glass, or a big rocks glass',
+    },
+  ],
+  other: [
+    {
+      drinkName: 'Ranch Water',
+      build: ['2 oz Tequila', '0.5 oz Fresh Lime Juice', 'Topo Chico or other sparkling mineral water to top'],
+      method: 'Build over ice, tequila and lime first, top with sparkling water, stir once.',
+      garnish: 'Lime wedge.',
+      glass: 'Highball',
+    },
+  ],
+};
+
+const FAMILY_LABEL: Record<SpiritFamily, string> = {
+  whiskey: 'whiskey-forward',
+  gin: 'gin-forward',
+  vodka: 'vodka-forward',
+  tequila: 'tequila-forward',
+  rum: 'rum-forward',
+  other: 'house',
+};
+
+function suggestFutureDrink(topDrinks: { name: string; count: number }[], menuItems: MenuItem[], isAllTime = false): { description: string; twist: RecipeTwist } {
+  const familyScores: Partial<Record<SpiritFamily, number>> = {};
+  const familyExamples: Partial<Record<SpiritFamily, string[]>> = {};
+
   for (const d of topDrinks) {
-    const match = menuItems.find((m) => m.name.toLowerCase() === d.name.toLowerCase());
-    if (match && match.category === 'Cocktails') {
-      sourceItem = match;
-      break;
-    }
-  }
-  if (!sourceItem) {
-    sourceItem = menuItems.find((m) => m.category === 'Cocktails');
+    const item = menuItems.find((m) => m.name.toLowerCase() === d.name.toLowerCase());
+    if (!item || item.category !== 'Cocktails') continue;
+    const family = classifyFamily(item.ingredients);
+    if (!family) continue;
+    familyScores[family] = (familyScores[family] || 0) + d.count;
+    (familyExamples[family] = familyExamples[family] || []).push(d.name);
   }
 
-  const inspiration = sourceItem?.name || topDrinks[0]?.name || 'the classics';
-  const key = inspiration.toLowerCase();
-  const twist = RECIPE_TWISTS[key] || (sourceItem ? genericTwist(sourceItem) : {
-    twistName: `The ${inspiration} Twist`,
-    build: ['2 oz your favorite base spirit', '0.5 oz something bright'],
-    method: 'Combine with ice and strain.',
-    garnish: 'A citrus peel.',
-    glass: 'Your favorite glass',
-  });
+  const ranked = (Object.entries(familyScores) as [SpiritFamily, number][]).sort((a, b) => b[1] - a[1]);
+  const topFamily: SpiritFamily = ranked[0]?.[0] || 'other';
+  const examples = familyExamples[topFamily] || [];
 
-  return {
-    name: inspiration,
-    description: isAllTime
-      ? `${inspiration} is the all-time crowd favorite, so we built a specific twist on it instead of just telling you to wing it.`
-      : `${inspiration} was the crowd favorite this month, so we built a specific twist on it instead of just telling you to wing it.`,
-    twist,
-  };
+  const existingNames = new Set(menuItems.map((m) => m.name.toLowerCase()));
+  const candidates = OFF_MENU_LIBRARY[topFamily];
+  const twist = candidates.find((c) => !existingNames.has(c.drinkName.toLowerCase())) || candidates[0];
+
+  const period = isAllTime ? 'since day one' : 'this month';
+  const description = examples.length > 0
+    ? `${examples.slice(0, 2).join(' and ')} ${examples.length > 1 ? 'have' : 'has'} been carrying the ${FAMILY_LABEL[topFamily]} lineup ${period}. Here's something in that same lane that isn't on the menu yet.`
+    : `No clean pattern yet, so here's a crowd-pleaser worth adding to the lineup.`;
+
+  return { description, twist };
 }
 
 function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[], isAllTime = false): string {
   const noOrders = stats.totalOrders === 0;
-  const drink = suggestDrinkOfMonth(stats.topDrinks, menuItems, isAllTime);
+  const drink = suggestFutureDrink(stats.topDrinks, menuItems, isAllTime);
   const topGuest = stats.topGuests[0];
 
   const punnyTitles: Record<string, string> = {
@@ -418,6 +384,20 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[], isAllTim
         }
       </p>
     </div>
+
+    <!-- Feature Alerts -->
+    ${FEATURE_ALERTS.length > 0 ? `
+    <div style="padding:24px 32px;border-bottom:2px solid #F0EDE8;background:#FDF6E3;">
+      ${FEATURE_ALERTS.map((f) => `
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:20px;">📣</span>
+        <div>
+          <p style="margin:0 0 4px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#8B1538;font-weight:bold;">New Feature Alert</p>
+          <p style="margin:0 0 4px;font-size:15px;font-weight:bold;color:#2d2d2d;">${f.title}</p>
+          <p style="margin:0;font-size:14px;line-height:1.7;color:#555;">${f.body}</p>
+        </div>
+      </div>`).join('<div style="height:16px;"></div>')}
+    </div>` : ''}
 
     ${noOrders ? '' : `
     <!-- By the Numbers -->
@@ -500,8 +480,8 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[], isAllTim
     <div style="padding:32px;border-bottom:2px solid #F0EDE8;background:#8B1538;">
       <h2 style="margin:0 0 4px;font-family:Georgia,serif;font-size:18px;color:#FFD700;text-transform:uppercase;letter-spacing:2px;">${isAllTime ? 'Next Round On Us' : 'Drink of the Month'} ✨</h2>
       <p style="margin:0 0 20px;font-size:12px;color:rgba(255,255,255,0.6);letter-spacing:1px;text-transform:uppercase;">The Connerseur Recommends</p>
-      <h3 style="margin:0 0 4px;font-family:Georgia,serif;font-size:22px;color:#FFFFFF;">${drink.twist.twistName}</h3>
-      <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,0.6);font-style:italic;">Built off ${drink.name}, the drink that earned it.</p>
+      <h3 style="margin:0 0 4px;font-family:Georgia,serif;font-size:22px;color:#FFFFFF;">${drink.twist.drinkName}</h3>
+      <p style="margin:0 0 16px;font-size:13px;color:rgba(255,255,255,0.6);font-style:italic;">Not on the menu. Yet.</p>
       <p style="margin:0 0 16px;font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);">${drink.description}</p>
       <div style="padding:16px;background:rgba(0,0,0,0.25);border-radius:8px;border-left:3px solid #FFD700;">
         <p style="margin:0 0 8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FFD700;font-weight:bold;">The Recipe</p>
@@ -531,10 +511,12 @@ function generateNewsletter(stats: MonthlyStats, menuItems: MenuItem[], isAllTim
 export async function GET(request: NextRequest) {
   const isTest = request.nextUrl.searchParams.get('test') === 'true';
   const isPreview = request.nextUrl.searchParams.get('preview') === 'true';
+  const isManualSend = request.nextUrl.searchParams.get('send') === 'true';
   const isAllTime = request.nextUrl.searchParams.get('range') === 'all';
+  const toParam = request.nextUrl.searchParams.get('to');
   const bartenderKey = request.nextUrl.searchParams.get('key');
 
-  if (isTest || isPreview) {
+  if (isTest || isPreview || isManualSend) {
     if (bartenderKey !== process.env.BARTENDER_DASH_KEY) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -545,7 +527,8 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  const recipients = isTest ? ['Nicholasc.conner@gmail.com'] : RECIPIENTS;
+  const manualRecipients = toParam ? toParam.split(',').map((e) => e.trim()).filter(Boolean) : null;
+  const recipients = isManualSend && manualRecipients ? manualRecipients : isTest ? ['Nicholasc.conner@gmail.com'] : RECIPIENTS;
 
   try {
     const now = new Date();
@@ -586,10 +569,11 @@ export async function GET(request: NextRequest) {
       }));
     }
 
+    // Fetch the full library (not just is_active) so the "not on the menu" recommendation
+    // never suggests something already sitting in the recipe library, toggled off or not.
     const { data: menuItems } = await supabaseAdmin
       .from('menu_items')
-      .select('*')
-      .eq('is_active', true);
+      .select('*');
 
     const monthLabelText = isAllTime ? 'All-Time' : (isTest ? now : firstOfLastMonth).toLocaleString('default', { month: 'long' });
     const yearLabelText = isAllTime
