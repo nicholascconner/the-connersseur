@@ -11,11 +11,11 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const started = Date.now();
   try {
-    const { error } = await supabase
-      .from('menu_items')
-      .select('id', { count: 'exact', head: true });
+    // Read a real row (not a HEAD/count request): HEAD requests can report success
+    // even when the table is unreadable, e.g. right after a project restore.
+    const { data, error } = await supabase.from('menu_items').select('id').limit(1);
 
-    if (error) {
+    if (error || !data || data.length === 0) {
       console.error('Health check: database query failed:', error);
       return NextResponse.json(
         { status: 'error', database: 'unreachable' },
